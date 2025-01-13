@@ -1,0 +1,184 @@
+[
+	{
+		"object_type": "command",
+		"name": "dummy_up",
+		"type": "samm.dummymodule.DummyModuleUp",
+		"args": {}
+	},
+	{
+		"object_type": "command",
+		"name": "dummy_down",
+		"type": "samm.dummymodule.DummyModuleDown",
+		"args": {}
+	},
+	{
+		"object_type": "command",
+		"name": "ping",
+		"type": "samm.pingmodule.PingModule",
+		"args": {
+			"hostaddress": { "Fn::ref": [ "instance.address" ] },
+			"count": { "Fn::ref": [ "check.count" ] },
+			"timeout": { "Fn::ref": [ "check.timeout" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "cim",
+		"type": "sammwr.wmi.WMIQuery",
+		"args": {
+			"class_name": { "Fn::ref": [ "check.class_name" ] },
+			"endpoint": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						":5985/wsman"
+					]]
+				},
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "cim_wql",
+		"type": "sammwr.wmi.WMIQuery",
+		"args": {
+			"wql": { "Fn::ref": [ "check.wql" ] },
+			"endpoint": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						":5985/wsman"
+					]]
+				},
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "snmp_table",
+		"type": "sammsnmp.SnmpQuery",
+		"args": {
+			"hostname": { "Fn::ref": [ "instance.address" ] },
+			"version":  { "Fn::ref": [ "instance.snmp_version", "" ] },
+			"community": { "Fn::ref": [ "instance.snmp2_community", "" ] },
+			"security_level": { "Fn::ref": [ "instance.snmp3_security_level", "" ] },
+			"security_username": { "Fn::ref": [ "instance.snmp3_security_username", "" ] },
+			"privacy_protocol": { "Fn::ref": [ "instance.snmp3_privacy_protocol", "" ] },
+			"privacy_password": { "Fn::ref": [ "instance.snmp3_privacy_password", "" ] },
+			"auth_protocol": { "Fn::ref": [ "instance.snmp3_auth_protocol", "" ] },
+			"auth_password": { "Fn::ref": [ "instance.snmp3_auth_password", "" ] },
+			"use_enums": 1,
+			"table": { "Fn::ref": [ "check.table" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "snmp_vars",
+		"type": "sammsnmp.SnmpQuery",
+		"args": {
+			"hostname": { "Fn::ref": [ "instance.address" ] },
+			"version":  { "Fn::ref": [ "instance.snmp_version", "" ] },
+			"community": { "Fn::ref": [ "instance.snmp2_community", "" ] },
+			"security_level": { "Fn::ref": [ "instance.snmp3_security_level", "" ] },
+			"security_username": { "Fn::ref": [ "instance.snmp3_security_username", "" ] },
+			"privacy_protocol": { "Fn::ref": [ "instance.snmp3_privacy_protocol", "" ] },
+			"privacy_password": { "Fn::ref": [ "instance.snmp3_privacy_password", "" ] },
+			"auth_protocol": { "Fn::ref": [ "instance.snmp3_auth_protocol", "" ] },
+			"auth_password": { "Fn::ref": [ "instance.snmp3_auth_password", "" ] },
+			"use_enums": 1,
+			"mib_variable_name_list": { "Fn::ref": [ "check.mib_variable_name_list" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "cim_certificates",
+		"type": "sammwr.certificates.WRCertificates",
+		"args": {
+			"endpoint": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						":5985/wsman"
+					]]
+				},
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] }
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "cim_logs",
+		"type": "samm.utils.LokiStream",
+		"args": {
+			"submodule_str": "sammwr.event.CIMEvent",
+			"loki_url": { "Fn::ref": [ "resources.loki_url" ] },
+			"endpoint": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						":5985/wsman"
+					]]
+				},
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"logfile": { "Fn::ref": [ "check.logfile" ] },
+			"event_type": { "Fn::ref": [ "check.event_type" ] },
+			"time_property": { "Fn::ref": [ "check.time_property" ] },
+			"tag_property": {
+				"logfile": "Logfile",
+				"instance": "ComputerName",
+				"type": "Type"
+			},
+			"tags": {
+				"job": { "Fn::ref": [ "tags.job" ] }
+			}
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "odata_ctx_director",
+		"type": "sammodata.OdataQuery",
+		"args": {
+			"auth_protocol": "ntlm",
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"entity": { "Fn::ref": [ "check.entity" ] },
+			"expand": { "Fn::ref": [ "check.expand" ] },
+			"filter": { "Fn::ref": [ "check.filter" ] },
+			"service_url": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						"/citrix/monitor/odata/v2/Data/"
+					]]
+				}
+		}
+	},
+	{
+		"object_type": "command",
+		"name": "odata_ctx_events",
+		"type": "samm.utils.LokiStream",
+		"args": {
+			"submodule_str": "sammodata.OdataQuery",
+			"loki_url": { "Fn::ref": [ "resources.loki_url" ] },
+			"service_url": {
+					"Fn::join": [[
+						"http://",
+						{ "Fn::ref": [ "instance.address" ] },
+						"/citrix/monitor/odata/v2/Data/"
+					]]
+				},
+			"auth_protocol": "ntlm",
+			"username": { "Fn::ref": [ "resources.cim_username" ] },
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"entity": { "Fn::ref": [ "check.entity" ] },
+			"expand": { "Fn::ref": [ "check.expand" ] },
+			"filter": { "Fn::ref": [ "check.filter" ] },
+			"tag_property": { "Fn::ref": [ "check.tag_property", {} ] },
+			"time_property": { "Fn::ref": [ "check.time_property" ] },
+			"tags": { "Fn::ref": [ "check.tags" ] }
+		}
+	}
+]

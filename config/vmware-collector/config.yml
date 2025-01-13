@@ -1,0 +1,15 @@
+default:
+  vsphere_host: "<replace with host>"
+  vsphere_user: "<replace with username>"
+  vsphere_password: "<replace with password>"
+  ignore_ssl: True
+  specs_size: 5000
+  fetch_custom_attributes: True
+  fetch_tags: True
+  fetch_alarms: True
+  collect_only:
+    vms: False
+    vmguests: True
+    datastores: True
+    hosts: True
+    snapshots: True

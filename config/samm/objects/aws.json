@@ -1,0 +1,300 @@
+[
+    {
+        "object_type": "command",
+        "name": "aws_ws_command",
+        "type": "sammaws.workspaces.AwsWorkspacesQuery",
+        "args": {
+            "query_name": { "Fn::ref": [ "check.query" ] },
+            "aws_access_key_id": { "Fn::ref": [ "resources.aws.aws_access_key_id"] } ,
+            "aws_secret_access_key": { "Fn::ref": [ "resources.aws.aws_secret_access_key"] },
+            "aws_session_token": { "Fn::ref": [ "resources.aws.aws_session_token"] },
+            "region_name": { "Fn::ref": [ "resources.aws.region_name" ] }
+        }
+    },
+    {
+        "object_type": "command",
+        "name": "aws_appstream_command",
+        "type": "sammaws.appstream.AwsAppstreamQuery",
+        "args": {
+            "query_name": { "Fn::ref": [ "check.query" ] },
+            "aws_access_key_id": { "Fn::ref": [ "resources.aws.aws_access_key_id"] } ,
+            "aws_secret_access_key": { "Fn::ref": [ "resources.aws.aws_secret_access_key"] },
+            "aws_session_token": { "Fn::ref": [ "resources.aws.aws_session_token"] },
+            "region_name": { "Fn::ref": [ "resources.aws.region_name" ] }
+        }
+    },
+    {
+        "object_type": "command",
+        "name": "aws_appstream_sessions",
+        "type": "sammaws.appstream.AwsAppstreamSessions",
+        "args": {
+            "aws_access_key_id": { "Fn::ref": [ "resources.aws.aws_access_key_id"] } ,
+            "aws_secret_access_key": { "Fn::ref": [ "resources.aws.aws_secret_access_key"] },
+            "aws_session_token": { "Fn::ref": [ "resources.aws.aws_session_token"] },
+            "region_name": { "Fn::ref": [ "resources.aws.region_name" ] }
+        }
+    },
+    {
+        "object_type": "command",
+        "name": "aws_command_appstream_stack_fleet",
+        "type": "sammaws.appstream.AwsAppstreamStackFleet",
+        "args": {
+            "aws_access_key_id": { "Fn::ref": [ "resources.aws.aws_access_key_id"] } ,
+            "aws_secret_access_key": { "Fn::ref": [ "resources.aws.aws_secret_access_key"] },
+            "aws_session_token": { "Fn::ref": [ "resources.aws.aws_session_token"] },
+            "region_name": { "Fn::ref": [ "resources.aws.region_name" ] }
+        }
+    },
+    {
+        "object_type": "check",
+        "name": "aws_appstream_stack_fleet",
+        "command": "aws_command_appstream_stack_fleet",
+        "service": "appstream",
+        "query": "describe_sessions",
+        "alias": "aws_appstream_stack_fleet",
+        "check_interval": 300,
+        "stale_timeout": 900,
+        "tag_properties": [
+            "StackName",
+            "FleetName"
+        ],
+        "info_metrics": [
+            "StackName"
+        ]
+    },
+    {
+        "object_type": "check",
+        "name": "aws_appstream_sessions",
+        "command": "aws_appstream_sessions",
+        "alias": "aws_appstream_sessions",
+        "check_interval": 60,
+        "stale_timeout": 180,
+        "tag_properties": [
+            "Id",
+            "UserId",
+            "StackName",
+            "FleetName",
+            "InstanceId",
+            "NetworkAccessConfiguration.EniPrivateIpAddress"
+        ],
+        "metrics": [
+            "State",
+            "ConnectionState",
+            "StartTime",
+            "MaxExpirationTime",
+            "AuthenticationType"
+        ],
+        "value_mappings": {
+            "State": {
+                "ACTIVE": 1,
+                "PENDING": 2,
+                "EXPIRED": 3
+            },
+            "ConnectionState": {
+                "NOT_CONNECTED": 0,
+                "CONNECTED": 1
+            },
+            "AuthenticationType": {
+                "API": 1,
+                "SAML": 2,
+                "USERPOOL": 3,
+                "AWS_AD": 4
+            }
+        }
+    },
+    {
+        "object_type": "check",
+        "name": "aws_appstream_fleets",
+        "command": "aws_appstream_command",
+        "query": "describe_fleets",
+        "alias": "aws_appstream_fleets",
+        "check_interval": 300,
+        "stale_timeout": 900,
+        "tag_properties": [
+            "Name",
+            "DisplayName",
+            "Description",
+            "ImageName",
+            "InstanceType",
+            "FleetType",
+            "DomainJoinInfo.DirectoryName",
+            "DomainJoinInfo.OrganizationalUnitDistinguishedName",
+            "StreamView",
+            "Platform"
+        ],
+        "metrics": [
+            "CreatedTime",
+            "ComputeCapacityStatus.Desired",
+            "ComputeCapacityStatus.Running",
+            "ComputeCapacityStatus.InUse",
+            "ComputeCapacityStatus.Available",
+            "ComputeCapacityStatus.DesiredUserSessions",
+            "ComputeCapacityStatus.AvailableUserSessions",
+            "ComputeCapacityStatus.ActiveUserSessions",
+            "ComputeCapacityStatus.ActualUserSessions",
+            "MaxUserDurationInSeconds",
+            "DisconnectTimeoutInSeconds",
+            "State",
+            "CreatedTime",
+            "IdleDisconnectTimeoutInSeconds",
+            "MaxConcurrentSessions",
+            "MaxSessionsPerInstance"
+        ],
+        "info_metrics": [
+            "Arn"
+        ],
+        "value_mappings": {
+            "State": {
+                "STARTING": 1,
+                "RUNNING": 2, 
+                "STOPPING": 3,
+                "STOPPED": 4
+            }
+        }
+    },
+    {
+        "object_type": "check",
+        "name": "aws_appstream_stacks",
+        "command": "aws_appstream_command",
+        "query": "describe_stacks",
+        "alias": "aws_appstream_stacks",
+        "check_interval": 300,
+        "stale_timeout": 900,
+        "tag_properties": [
+            "Name",
+            "Description",
+            "DisplayName"
+        ],
+        "metrics": [
+            "CreatedTime"
+        ],
+        "info_metrics": [
+            "Arn"
+        ]
+    },
+    {
+        "object_type": "check",
+        "name": "aws_workspace_directories",
+        "command": "aws_ws_command",
+        "query": "describe_workspace_directories",
+        "alias": "aws_workspace_directories",
+        "check_interval": 300,
+        "stale_timeout": 900,
+        "tag_properties": [
+            "DirectoryId",
+            "Alias",
+            "DirectoryName",
+            "RegistrationCode",
+            "CustomerUserName",
+            "IamRoleId",
+            "DirectoryType",
+            "WorkspaceSecurityGroupId",
+            "WorkspaceCreationProperties.EnableWorkDocs",
+            "WorkspaceCreationProperties.EnableInternetAccess",
+            "WorkspaceCreationProperties.DefaultOu",
+            "WorkspaceCreationProperties.CustomSecurityGroupId",
+            "WorkspaceCreationProperties.UserEnabledAsLocalAdministrator",
+            "Tenancy",
+            "WorkspaceDirectoryName",
+            "WorkspaceDirectoryDescription",
+            "UserIdentityType",
+            "WorkspaceType"
+        ],
+        "metrics": [
+            "State",
+            "WorkspaceCreationProperties.EnableMaintenanceMode"
+        ],
+        "info_metrics": [
+            "DirectoryId"
+        ],
+        "value_mappings": {
+            "State": {
+                "REGISTERING": 1,
+                "REGISTERED": 2,
+                "DEREGISTERING": 3,
+                "DEREGISTERED": 4,
+                "ERROR": 5
+            }
+        }
+    },
+    {
+        "object_type": "check",
+        "name": "aws_workspaces_connections",
+        "command": "aws_ws_command",
+        "query": "describe_workspaces_connection_status",
+        "alias": "aws_workspaces_connection_status",
+        "check_interval": 60,
+        "stale_timeout": 180,
+        "tag_properties": [
+            "WorkspaceId"
+        ],
+        "metrics": [
+            "ConnectionState",
+            "ConnectionStateCheckTimestamp",
+            "LastKnownUserConnectionTimestamp"
+        ],
+        "value_mappings": {
+            "ConnectionState": {
+                "CONNECTED": 1,
+                "DISCONNECTED": 0,
+                "UNKNOWN": -1
+            }
+        }
+    },
+    {
+        "object_type": "check",
+        "name": "aws_workspaces",
+        "command": "aws_ws_command",
+        "query": "describe_workspaces",
+        "alias": "aws_workspaces",
+        "check_interval": 300,
+        "stale_timeout": 900,
+        "tag_properties": [
+            "WorkspaceId",
+            "DirectoryId",
+            "UserName",
+            "IpAddress",
+            "BundleId",
+            "SubnetId",
+            "ComputerName",
+            "WorkspaceName",
+            "WorkspaceProperties.ComputeTypeName",
+            "WorkspaceProperties.OperatingSystemName"
+        ],
+        "metrics": [
+            "State",
+            "UserVolumeEncryptionEnabled",
+            "RootVolumeEncryptionEnabled",
+            "WorkspaceProperties.RunningMode",
+            "WorkspaceProperties.RunningModeAutoStopTimeoutInMinutes"
+        ],
+        "info_metrics": [
+            "WorkspaceId"
+        ],
+        "value_mappings": {
+            "State": {
+                "PENDING": 0,
+                "AVAILABLE": 1,
+                "IMPAIRED": 2,
+                "UNHEALTHY": 3,
+                "REBOOTING": 4,
+                "STARTING": 5,
+                "REBUILDING": 6,
+                "RESTORING": 7,
+                "MAINTENANCE": 8,
+                "ADMIN_MAINTENANCE": 9,
+                "TERMINATING": 10,
+                "TERMINATED": 11,
+                "SUSPENDED": 12,
+                "UPDATING": 13,
+                "STOPPING": 14,
+                "STOPPED": 15,
+                "ERROR": 16
+            },
+            "WorkspaceProperties.RunningMode": {
+                "ALWAYS_ON": 1,
+                "AUTO_STOP": 2
+            }
+        }
+    }
+]

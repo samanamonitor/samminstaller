@@ -1,0 +1,1863 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Infrastructure Servers
+      folder: windows-servers
+      interval: 5m
+      rules:
+        - uid: edsxs5mvbg7b4d
+          title: Critical Role Down
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (up{server_group="prod"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          annotations:
+            description: ""
+            runbook_url: ""
+            summary: ""
+          labels:
+            "": ""
+            severity: critical
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: cdsydrlbaesxsf
+          title: Citrix DDC Windows Services
+          condition: AVAILABLE
+          data:
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (up{role="cvad_ddc",server_group="prod"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: B
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (clamp(sum by (fqdn,role) (cim_service_state{role="cvad_ddc",server_group="prod",caption=~"(?i)(Citrix AD Identity Service|Citrix Analytics Service|Citrix App Library Service|Citrix Broker Service|Citrix Config Synchronizer Service|Citrix Configuration Logging Service|Citrix Configuration Service|Citrix Delegated Administration Service|Citrix Environment Test Service|Citrix High Availability Service|Citrix Host Service|Citrix Machine Creation Service|Citrix Monitor Service|Citrix Orchestration Service|Citrix Telemetry Service|Citrix Trust Service|Print Spooler|Group Policy Client|Netlogon)"}) == 19, 1, 1) or clamp(absent(nonexist{fqdn="none",role="cvad_ddc"}), 0, 0))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: HOSTS
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: HOSTS
+                type: threshold
+            - refId: SERVICES
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                            - 0
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: SERVICES
+                type: threshold
+            - refId: AVAILABLE
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: ${HOSTS} && ${SERVICES}
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: AVAILABLE
+                type: math
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: bdsygcv1bagaod
+          title: Citrix PVS Windows Services
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (up{role="cvad_pvs",server_group="prod"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (clamp(sum by (fqdn,role) (cim_service_state{role="cvad_pvs",server_group="prod",caption=~"(?i)(Citrix PVS API Service|Citrix PVS Soap Server|Citrix PVS Stream Service|Citrix PVS TFTP Service|Citrix PVS Two-Stage Boot Service|Citrix Telemetry Service)"}) == 6, 1, 1) or clamp(absent(nonexist{fqdn="none",role="cvad_pvs"}), 0, 0))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: B
+            - refId: HOSTS
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: HOSTS
+                type: threshold
+            - refId: SERVICES
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                            - 0
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: SERVICES
+                type: threshold
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: ${HOSTS} && ${SERVICES}
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: math
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: fdt818cnmns3ka
+          title: Citrix StoreFront Windows Services
+          condition: F
+          data:
+            - refId: HOST_UP
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: up{role="cvad_sf",server_group="prod"}
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: HOST_UP
+            - refId: HOST_SERVICES
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn) (cim_service_state{role="cvad_sf",server_group="prod",caption=~"(?i)(Citrix Configuration Replication|Citrix Credential Wallet|Citrix Default Domain Services|Citrix Peer Resolution Service|Citrix Service Monitor|Citrix Subscriptions Store|Citrix Telemetry Service|World Wide Web Publishing Service)"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: HOST_SERVICES
+            - refId: HOST_UP_RED
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: HOST_UP
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: HOST_UP_RED
+                settings:
+                    mode: replaceNN
+                    replaceWithValue: 0
+                type: reduce
+            - refId: HOST_UP_THR
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: HOST_UP_RED
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: HOST_UP_THR
+                type: threshold
+            - refId: HOST_SERVICE_RED
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: HOST_SERVICES
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: HOST_SERVICE_RED
+                settings:
+                    mode: replaceNN
+                    replaceWithValue: 0
+                type: reduce
+            - refId: HOST_SERVICE_THR
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 8
+                            - 0
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: HOST_SERVICE_RED
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: HOST_SERVICE_THR
+                type: threshold
+            - refId: F
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: ${HOST_UP_RED} && ${HOST_SERVICE_THR}
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: F
+                type: math
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: bdsx70vrprg8we
+          title: Infra_CPU_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,role,layer,server_group) (rate(cim_perfcpu_percentidletime{server_group="prod", name="_Total",}[5m]) / rate(cim_perfcpu_timestamp_sys100ns[5m]))
+                instant: true
+                interval: 60s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: adsx7ab8phibkc
+          title: Infra_RAM_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                exemplar: false
+                expr: sum by (fqdn,role,layer,server_group) (cim_os_freephysicalmemory{server_group="prod"} / cim_os_totalvisiblememorysize)
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: fdsx80x8pkhs0d
+          title: Infra_PF_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: max by (fqdn,role,layer,server_group) (cim_pagefile_currentusage{server_group="prod"} / cim_pagefile_allocatedbasesize)
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.8
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: ddsx8jumig3k0b
+          title: Infra_Disk_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,role,layer,server_group,caption) (cim_disk_freespace{server_group="prod",drivetype="3"} / cim_disk_size)
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: adsxbttasyayob
+          title: Infra_Uptime_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,role,layer,server_group) (time() - cim_os_lastbootuptime{server_group="prod"})
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 2.592e+06
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: ddsxccjsywao0a
+          title: Infra_Cert_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,role,layer,sslcertkeyname,server_group) (cim_certificates_ssldaystoexpire{server_group="prod"})
+                instant: true
+                interval: 20m
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 90
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: bdsxebcwglon4b
+          title: Infra_IOPS_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by(fqdn,layer,role,server_group) (rate(cim_perfdisk_diskreadspersec{server_group="prod",name="_Total"}[5m]) )
+                instant: true
+                interval: 5m
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: D
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role,server_group) (rate(cim_perfdisk_diskwritespersec{server_group="prod",name="_Total"}[5m]) )
+                instant: true
+                interval: 5m
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: D
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: D
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: B
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: ddsxjt43f0wlce
+          title: VDA_CPU_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,role,layer) (rate(cim_perfcpu_percentidletime{role="cvad_vda", name="_Total",}[5m]) / rate(cim_perfcpu_timestamp_sys100ns[5m])) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"} * 0) without (hostingservername), "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                interval: 60s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: fdsxk58ufe6m8c
+          title: VDA_RAM_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                exemplar: false
+                expr: sum by (fqdn,layer,role) (cim_os_freephysicalmemory / cim_os_totalvisiblememorysize + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)")))
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: cdsxkfnckcphce
+          title: VDA_Disk_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role,caption) ((cim_disk_freespace{drivetype="3"} / cim_disk_size)) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: fdsxks904hg5cc
+          title: VDA_Uptime_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role,desktopgroup_name) (time() - cim_os_lastbootuptime + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)")))
+                instant: true
+                interval: 600s
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 172800
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: cdsxl208ghzwgc
+          title: VDA_IOPS_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by(fqdn,layer,role) (rate(cim_perfdisk_diskreadspersec{role="cvad_vda",name="_Total"}[5m])) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                interval: 5m
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: D
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role) (rate(cim_perfdisk_diskwritespersec{role="cvad_vda",name="_Total"}[5m]) ) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                interval: 5m
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: D
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: D
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: B
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: cdsxl5g2js4cgf
+          title: VDA_PF_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role,name) (cim_pagefile_currentusage{role="cvad_vda"} / cim_pagefile_allocatedbasesize) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="2"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.8
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack
+        - uid: adsxmffx3i800c
+          title: VDI_IOPS_Alert
+          condition: C
+          data:
+            - refId: RD
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                disableTextWrap: false
+                editorMode: code
+                expr: sum by (fqdn) (rate(cim_perfdisk_diskreadspersec{name="_Total", role="cvad_vdi"}[10m])) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="1"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                fullMetaSearch: false
+                includeNullMetadata: true
+                instant: true
+                intervalMs: 1000
+                legendFormat: '{{fqdn}}'
+                maxDataPoints: 43200
+                range: false
+                refId: RD
+                useBackend: false
+            - refId: WR
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn) (rate(cim_perfdisk_diskwritespersec{name="_Total", role="cvad_vdi"}[10m])) + on (fqdn) group_left (desktopgroup_name) (label_replace(sum (ctx_machine_isinmaintenancemode{desktopgroup_name!="none",catalog_sessionsupport="1"}) without (hostingservername) * 0, "fqdn", "$1", "dnsname", "(.*)"))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: WR
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: RD
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: WR
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: A
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: D
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 100
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: D
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 15m
+          isPaused: false
+        - uid: fdsxncazoq1vke
+          title: Infra_ServersDown_Alert
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (fqdn,layer,role,server_group) (up{server_group="prod"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+        - uid: fdsxwodkhgbnkf
+          title: Critical Storefront
+          condition: E
+          data:
+            - refId: HOSTS_UP
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (up{role="cvad_sf",server_group="prod"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: HOSTS_UP
+            - refId: HOST_SERVICES_UP
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+              model:
+                datasource:
+                    type: prometheus
+                    uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
+                editorMode: code
+                expr: sum by (role) (clamp(sum by (fqdn,role) (cim_service_state{role="cvad_sf",server_group="prod",caption=~"(?i)(Citrix Configuration Replication|Citrix Credential Wallet|Citrix Default Domain Services|Citrix Peer Resolution Service|Citrix Service Monitor|Citrix Subscriptions Store|Citrix Telemetry Service|World Wide Web Publishing Service)"}) == 8, 1, 1) or clamp(absent(nonexistant{role="cvad_sf"}), 0, 0))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: HOST_SERVICES_UP
+            - refId: SERVICES_THRESHOLD
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: HOST_SERVICES_UP
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: SERVICES_THRESHOLD
+                type: threshold
+            - refId: HOSTS_THRESHOLD
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                            - 0
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: HOSTS_UP
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: HOSTS_THRESHOLD
+                type: threshold
+            - refId: E
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: ${SERVICES_THRESHOLD} || ${HOSTS_THRESHOLD}
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: E
+                type: math
+          noDataState: NoData
+          execErrState: Error
+          for: 0s
+          isPaused: false
+          notification_settings:
+            receiver: samana-slack

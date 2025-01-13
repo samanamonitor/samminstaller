@@ -1,0 +1,34 @@
+{
+    "debug": "INFO",
+    "base_dir": "/usr/local/samm/",
+    "config_dir": "etc",
+    "sock_file": "/tmp/samm.sock",
+    "resource_file": "resources.json",
+    "object_files":[
+        "objects/commands.json", 
+        "objects/checks-citrix.json",
+        "objects/checks-generic.json", 
+        "objects/checks-windows.json",
+        "objects/checks-netscaler.json",
+        "objects/aws.json",
+        "objects/instance-templates.json"
+    ],
+    "object_dirs": [
+        "objects/environment"
+    ],
+    "webserver": true,
+    "webserver_port": 5000,
+    "wait_on_error": 60,
+    "pending_retry": 30,
+    "tags": {
+        "job": "samm1"
+    },
+    "service_tags": {
+        "instance": "samm1"
+    },
+    "poll_time": 5,
+    "stale_timeout": 600,
+    "initial_spread": 0.1,
+    "config_version_mismatch_action": "exit",
+    "max_attempts_per_loop": 1000
+}

@@ -1,0 +1,73 @@
+[
+	{
+		"object_type": "check",
+		"name": "dummy_up",
+		"command": "dummy_up",
+		"tag_properties": [
+			"name"
+		],
+		"alias": "dummy_up",
+		"check_interval": 5,
+		"stale_timeout": 45,
+		"metrics": [
+			"metric1",
+			"metric2"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "dummy_down",
+		"command": "dummy_down",
+		"tag_properties": [
+			"name"
+		],
+		"alias": "dummy_down",
+		"check_interval": 15,
+		"stale_timeout": 45,
+		"metrics": []
+	},
+	{
+		"object_type": "check",
+		"name": "snmp_ifstats",
+		"command": "snmp_table",
+		"table": "IF-MIB::ifTable",
+		"tag_properties": [
+			"ifDescr"
+		],
+		"alias": "snmp_ifstats",
+		"check_interval": 60,
+		"stale_timeout": 180,
+		"metrics": [
+			"ifInOctets",
+			"ifInUcastPkts",
+			"ifInDiscards",
+			"ifInErrors",
+			"ifInUnknownProtos",
+			"ifOutOctets",
+			"ifOutUcastPkts",
+			"ifOutDiscards",
+			"ifOutErrors"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ping",
+		"command": "ping",
+		"check_interval": 300,
+		"stale_timeout": 450,
+		"count": 2,
+		"timeout": 1,
+		"tag_properties": [
+			"hostaddress",
+			"address"
+		],
+		"metrics": [
+			"min_rtt",
+			"avg_rtt",
+			"max_rtt",
+			"packets_sent",
+			"packets_received",
+			"is_alive"
+		]
+	}
+]

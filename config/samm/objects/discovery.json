@@ -1,0 +1,65 @@
+[
+	{
+		"object_type": "discovery",
+		"discovery_type": "active_directory",
+		"discovery_object_type": "instance",
+		"name": "discovery_ldap",
+		"register": false,
+		"ldap_url": { "Fn::ref": [ "resources.ldap_url", "" ] },
+		"ldap_dn": { "Fn::ref": [ "resources.ldap_dn", "" ] },
+		"ldap_password": { "Fn::ref": [ "resources.ldap_password", "" ] },
+		"ldap_base": { "Fn::ref" : [ "resources.ldap_base", "" ] },
+		"ldap_scope": "SCOPE_SUBTREE",
+		"ldap_refresh_seconds": 600,
+		"ldap_attrlist": [
+			"dn",
+			"dNSHostName",
+			"cn"
+		],
+		"ldap_attribute_tags": {
+			"fqdn": "dNSHostName",
+			"dn": "dn"
+		},
+		"ldap_attribute_object_map": {
+			"name": "cn",
+			"alias": "cn",
+			"display_name": "cn",
+			"address": "dNSHostName"
+		}
+	},
+	{
+		"object_type": "discovery",
+		"use": "discovery_ldap",
+		"name": "discover_ldap_by_hostname_pattern",
+		"register": false,
+		"ldap_filter": {
+			"Fn::join": [[
+				"(",
+					"&",
+					"(objectClass=computer)",
+					"(lastLogonTimestamp>=",
+						{ "Fn::adsecondsfromnow": [ "31536000" ] },
+					")",
+					{ "Fn::ref": [ "discovery._host_pattern_list", "" ] },
+				")"
+			]]
+		}
+	},
+	{
+		"object_type": "discovery",
+		"use": "discovery_ldap",
+		"name": "discover_ldap_by_ou",
+		"register": false,
+		"ldap_filter": {
+			"Fn::join": [[
+				"(",
+					"&",
+					"(objectClass=computer)",
+					"(lastLogonTimestamp>=",
+						{ "Fn::adsecondsfromnow": [ "31536000" ] },
+					")",
+				")"
+			]]
+		}
+	}
+]

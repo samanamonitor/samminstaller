@@ -1,0 +1,8 @@
+{
+	"connection_timeout_seconds": 2,
+	"read_timeout_seconds": 30,
+	"vcenter_url": "https://vcenter.example.com",
+	"vcenter_username": "user@example.com",
+	"vcenter_password": "this is a password",
+	"vcenter_guid": "00000000-0000-0000-0000-000000000000"
+}

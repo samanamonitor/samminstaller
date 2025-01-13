@@ -1,0 +1,10 @@
+{
+        "aws": {
+                "region_name": "us-east-1"
+        },
+        "prometheus_remote_write": {
+                "url": "http://mimir:8080/api/v1/push",
+                "org_id": "samana"
+        },
+        "loki_url": "http://loki:3100/loki/api/v1/push",
+}

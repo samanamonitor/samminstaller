@@ -1,0 +1,29 @@
+[[servers]]
+host = "ldap.server.local"
+port = 636
+use_ssl = true
+start_tls = false
+tls_ciphers = []
+min_tls_version = ""
+ssl_skip_verify = true
+
+bind_dn = "CN=grafana user,CN=Users,DC=server,DC=local"
+bind_password = "this is a password"
+
+timeout = 10
+
+search_filter = "(sAMAccountName=%s)"
+
+search_base_dns = ["dc=server,dc=local"]
+
+[servers.attributes]
+member_of = "memberOf"
+name = "givenname"
+surname = "sn"
+username = "samaccountname"
+email =  "userprincipalname"
+
+[[servers.group_mappings]]
+group_dn = "CN=Grafana Group,OU=Groups,CN=Users,DC=server,DC=local"
+org_role = "Admin"
+grafana_admin = true # Available in Grafana v5.3 and above

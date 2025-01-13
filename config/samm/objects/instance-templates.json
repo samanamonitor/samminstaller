@@ -1,0 +1,155 @@
+[
+	{
+		"object_type": "instance",
+		"name": "template_host",
+		"checks": [
+			"ping"
+		],
+		"up_check": "ping.is_alive",
+		"check_if_down": false,
+		"stale_timeout": 600,
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_snmp_net",
+		"checks": [
+			"snmp_ifstats"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_netscaler",
+		"checks": [
+			"snmp_ns_info",
+			"snmp_ns_stats",
+			"snmp_ns_disk",
+			"snmp_ns_ipstats",
+			"snmp_ns_vserverstats",
+			"snmp_ns_certkey",
+			"snmp_ns_sslstats",
+			"snmp_ns_httpstats",
+			"snmp_ns_ifstats",
+			"snmp_ns_aaastats"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_netscaler_appfw",
+		"checks": [
+			"snmp_ns_appfwstats"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows",
+		"checks": [
+			"cim_os",
+			"cim_disk",
+			"cim_pagefile",
+			"cim_perfdisk",
+			"cim_perfnic",
+			"cim_perfcpu",
+			"cim_certificates",
+			"cim_computer",
+			"cim_system_events",
+			"cim_application_events",
+			"cim_service"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_rds",
+		"checks": [
+			"cim_perftssession",
+			"cim_perfprocess"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_iis",
+		"checks": [
+			"cim_perfiis"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_addc",
+		"checks": [
+			"cim_perflsa",
+			"cim_perfadds"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_adcs",
+		"checks": [
+			"cim_perfadcs"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_dns",
+		"checks": [
+			"cim_perfdns"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_smb",
+		"checks": [
+			"cim_perfsmb_server"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_citrix_cvad_control",
+		"checks": [
+			"ctx_machines",
+			"ctx_sessions",
+			"ctx_sessionevent",
+			"ctx_machinefail",
+			"ctx_machinefaillog",
+			"ctx_machineinfail"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_citrix_storefront",
+		"checks": [
+			"cim_ctxsf_events",
+			"cim_perfiis"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_vdi",
+		"checks": [
+			"cim_perftssession"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_citrix_vda",
+		"checks": [
+			"cim_perftssession",
+			"cim_perfcitrix_ica",
+			"cim_perfcitrix_cpm",
+			"cim_perfcitrix_print"
+		],
+		"register": false
+	}
+]

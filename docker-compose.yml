@@ -1,0 +1,186 @@
+services:
+  minio:
+    image: minio/minio
+    restart: on-failure:3
+    entrypoint: [""]
+    command: ["sh", "-c", "mkdir -p /data/mimir && mkdir -p /data/samm-loki && minio server --quiet /data"]
+    env_file:
+      - ./config/env/minio.env
+    volumes:
+      - minio-data:/data
+
+  db:
+    build: ./db
+    restart: on-failure:3
+    env_file: 
+      - ./config/env/mysql.env
+      - ./config/env/grafana.env
+    healthcheck:
+        test: [ "CMD-SHELL", "mariadb -u $${GF_DATABASE_USER} --password=$${GF_DATABASE_PASSWORD} -e \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$${GF_DATABASE_NAME}';\" $${GF_DATABASE_NAME}" ]
+        start_period: 10s
+        start_interval: 5s
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  load-balancer:
+    image: nginx:latest
+    restart: on-failure:3
+    volumes:
+      - ./config/nginx:/etc/nginx:ro
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      grafana:
+        condition: service_started
+      samm-manager:
+        condition: service_started
+
+  mq:
+    image: rabbitmq:latest
+    restart: on-failure:3
+    hostname: mq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  mimir:
+    image: grafana/mimir:latest
+    restart: on-failure:3
+    command:
+      - -config.file=/etc/mimir.yaml
+      - -config.expand-env=true
+    hostname: mimir
+    env_file:
+      - ./config/env/minio.env
+    depends_on:
+      minio:
+        condition: service_started
+    volumes:
+      - ./config/mimir/mimir.yaml:/etc/mimir.yaml
+      - mimir-data:/data
+
+  grafana:
+    build: ./grafana
+    restart: always
+    pull_policy: always
+    env_file:
+      - ./config/env/grafana.env
+    depends_on:
+      db:
+        condition: service_healthy
+      mimir:
+        condition: service_started
+      loki:
+        condition: service_started
+    volumes:
+      - ./config/grafana:/etc/grafana
+      - ./config/dashboards:/var/lib/grafana/dashboards
+
+  loki:
+    image: grafana/loki:latest
+    env_file:
+      - ./config/env/minio.env
+    command:
+      - -config.expand-env=true
+      - -config.file=/etc/loki/local-config.yaml
+    depends_on:
+      minio:
+        condition: service_started
+    volumes:
+      - ./config/loki/local-config.yaml:/etc/loki/local-config.yaml
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --log.level=error
+      - --storage.tsdb.path=/prometheus
+    depends_on:
+      mimir:
+        condition: service_started
+      vmware-collector:
+        condition: service_started
+      mq:
+        condition: service_started
+    volumes:
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+
+  samm-scheduler:
+    build: ./sammbase
+    command: [ "/usr/local/bin/scheduler.py", "/usr/local/samm/etc/conf.json" ]
+    hostname: samm-scheduler
+    env_file:
+      - ./config/env/samm.env
+    depends_on:
+      mq:
+        condition: service_healthy
+      samm-collector:
+        condition: service_started
+    restart: on-failure:3
+    volumes:
+      - ./config/samm:/usr/local/samm/etc
+
+  samm-collector:
+    build: ./sammbase
+    command: [ "/usr/local/bin/collector.py", "/usr/local/samm/etc/conf.json" ]
+    env_file:
+      - ./config/env/samm.env
+    deploy:
+      mode: replicated
+      replicas: 2
+    depends_on:
+      mq:
+        condition: service_healthy
+      mimir:
+        condition: service_started
+      prometheus:
+        condition: service_started
+    restart: on-failure:3
+    volumes:
+      - ./config/samm:/usr/local/samm/etc
+
+  samm-manager:
+    build: ./sammmanager
+    hostname: samm-manager
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - ./config/manager/conf.json:/app/conf.json
+
+  vmware-collector:
+    image: pryorda/vmware_exporter
+    restart: on-failure:3
+    hostname: vmware-collector
+    environment:
+      VSPHERE_IGNORE_SSL: True
+      VSPHERE_SPECS_SIZE: 2000
+    deploy:
+      mode: replicated
+      replicas: 0
+    volumes:
+      - ./config/vmware-collector/config.yml:/samm/config.yml
+
+  samm-test:
+    build: ./sammbase
+    command: [ "/bin/bash" ]
+    hostname: samm-test
+    stdin_open: true
+    tty: true
+    deploy:
+      mode: replicated
+      replicas: 0
+    volumes:
+      - /usr/src:/usr/src
+      - ./config/samm:/usr/local/samm/etc
+
+volumes:
+  minio-data:
+  mimir-data:
+  mysql-data:

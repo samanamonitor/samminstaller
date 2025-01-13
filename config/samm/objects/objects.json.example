@@ -1,0 +1,53 @@
+[
+    {
+        "object_type": "check",
+        "name": "cim_os",
+        "command": "wmi",
+        "class_name": "Win32_OperatingSystem",
+        "alias": "os",
+        "check_interval": 300,
+        "metrics": [ "FreePhysicalMemory", "FreeSpaceInPagingFiles", "FreeVirtualMemory", "LastBootUpTime", "MaxNumberOfProcesses", "MaxProcessMemorySize", "NumberOfLicensedUsers", "NumberOfProcesses", "NumberOfUsers", "TotalVirtualMemorySize", "TotalVisibleMemorySize"],
+        "register": true
+    },
+    {
+        "object_type": "check",
+        "name": "cim_disk",
+        "command": "wmi",
+        "class_name": "Win32_LogicalDisk",
+        "alias": "disk",
+        "tag_property": [ "Caption" ],
+        "check_interval": 300,
+        "metrics": [ "FreeSpace", "Size" ],
+        "register": true
+    },
+    {
+        "object_type": "check",
+        "name": "cim_cpu",
+        "command": "wmi",
+        "class_name": "Win32_PerfFormattedData_PerfOS_Processor",
+        "alias": "cpu",
+        "tag_property": [ "Name" ],
+        "check_interval": 60,
+        "metrics": [ "C1TransitionsPersec", "C2TransitionsPersec", "C3TransitionsPersec", "DPCRate", "DPCsQueuedPersec", "InterruptsPersec", "PercentC1Time", "PercentC2Time", "PercentC3Time", "PercentDPCTime", "PercentIdleTime", "PercentInterruptTime", "PercentPrivilegedTime", "PercentProcessorTime", "PercentUserTime" ],
+        "register": true
+    },
+    {
+        "object_type": "instance",
+        "name": "server1",
+        "alias": "server1",
+        "address": "ip address or fqdn",
+        "checks": [ "cim_os", "cim_disk", "cim_cpu" ],
+        "register": true
+    },
+    {
+        "object_type": "command",
+        "name": "wmi",
+        "type": "sammwr.wmi.WMIQuery",
+        "args": {
+            "class_name": "$(check.class_name)",
+            "endpoint": "http://$(instance.address):5985/wsman",
+            "username": "$(resources.wmi_username)",
+            "password": "$(resources.wmi_password)"
+        }
+    }
+]

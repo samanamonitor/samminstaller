@@ -1,0 +1,73 @@
+[
+	{
+		"object_type": "discovery",
+		"use": "discovery_domain_local",
+		"name": "all",
+		"ldap_base": "DC=domain,DC=local",
+		"object_use": [ 
+			"template_host", 
+			"template_windows"
+		],
+		"tags": {
+			"layer": "test"
+		}
+	},
+	{
+		"object_type": "instance",
+		"name": "<replace with windows instance name>",
+		"alias": "<replace with instance alias>",
+		"tags": { 
+			"layer": "control"
+		},
+		"address": "<replace with instance fqdn or IP>",
+		"use": [
+			"template_host",
+			"template_windows"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "<replace with windows instance name>",
+		"alias": "<replace with instance alias>",
+		"tags": { 
+			"layer": "control"
+		},
+		"address": "<replace with instance fqdn or IP>",
+		"checks": [
+			"cim_os",
+			"cim_disk",
+			"cim_cpu",
+			"cim_pagefile",
+			"cim_perfdisk",
+			"cim_perfnic",
+			"cim_perftssession",
+			"cim_perfprocess",
+			"cim_perfcpu",
+			"cim_certificates",
+			"cim_computer"
+		],
+		"stale_timeout": 432000,
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "<replace with netscaler instance name>",
+		"alias": "<replace with instance alias>",
+		"address": "<replace with instance fqdn or IP>",
+		"tags": { 
+			"layer": "access" 
+		},
+		"community": "<replace with snmp community>",
+		"checks": [ 
+			"snmp_ipstats", 
+			"snmp_ifstats", 
+			"snmp_vserver", 
+			"snmp_certkey", 
+			"snmp_ns", 
+			"snmp_appfw" 
+		],
+		"stale_timeout": 432000,
+		"register": false
+	}
+]

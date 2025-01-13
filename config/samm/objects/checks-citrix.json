@@ -1,0 +1,537 @@
+[
+	{
+		"object_type": "check",
+		"name": "ctx_machines",
+		"command": "odata_ctx_director",
+		"tag_properties": [
+			"Catalog.Name",
+			"Catalog.ProvisioningType",
+			"Catalog.PersistentUserChanges",
+			"Catalog.IsMachinePhysical",
+			"Catalog.AllocationType",
+			"Catalog.SessionSupport",
+			"DesktopGroup.Name",
+			"DesktopGroup.DeliveryType",
+			"DesktopGroup.DesktopKind",
+			{ "property": "DnsName", "transform": "lower" },
+			"HostingServerName",
+			"HostedMachineName"
+		],
+		"alias": "ctx_machine",
+		"check_interval": 300,
+		"stale_timeout": 900,
+		"entity": "Machines",
+		"expand": "Catalog,DesktopGroup,CurrentLoadIndex",
+		"filter": "Name ne null",
+		"metrics": [
+			"CurrentLoadIndex.EffectiveLoadIndex",
+			"CurrentLoadIndex.Cpu",
+			"CurrentLoadIndex.Memory",
+			"CurrentLoadIndex.Disk",
+			"CurrentLoadIndex.Network",
+			"CurrentLoadIndex.SessionCount",
+			"CurrentSessionCount",
+			"CurrentRegistrationState",
+			"RegistrationStateChangeDate",
+			"PowerStateChangeDate",
+			"CurrentPowerState",
+			"IsInMaintenanceMode"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_sessions",
+		"command": "odata_ctx_director",
+		"tag_properties": [
+			"User.Upn",
+			{"property": "Machine.DnsName", "transform": "lower" },
+			"SessionKey",
+			"User.UserName",
+			"User.Domain"
+		],
+		"alias": "ctx_session",
+		"check_interval": 300,
+		"stale_timeout": 900,
+		"entity": "Sessions",
+		"expand": "User,CurrentConnection,Machine",
+		"filter": "ConnectionState ne 3",
+		"metrics": [
+			"ConnectionState",
+			"ConnectionStateChangeDate",
+			"CreatedDate",
+			"CurrentConnection.LogOnStartDate",
+			"CurrentConnection.LogOnEndDate",
+			"CurrentConnection.BrokeringDuration",
+			"CurrentConnection.BrokeringDate",
+			"CurrentConnection.DisconnectCode",
+			"CurrentConnection.DisconnectDate",
+			"CurrentConnection.EstablishmentDate",
+			"CurrentConnection.VMStartStartDate",
+			"CurrentConnection.VMStartEndDate",
+			"CurrentConnection.HdxStartDate",
+			"CurrentConnection.HdxEndDate",
+			"CurrentConnection.AuthenticationDuration",
+			"CurrentConnection.GpoStartDate",
+			"CurrentConnection.GpoEndDate",
+			"CurrentConnection.LogOnScriptsStartDate",
+			"CurrentConnection.LogOnScriptsEndDate",
+			"CurrentConnection.ProfileLoadStartDate",
+			"CurrentConnection.ProfileLoadEndDate",
+			"CurrentConnection.InteractiveStartDate",
+			"CurrentConnection.InteractiveEndDate"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "cim_perfcitrix_ica",
+		"command": "cim",
+		"class_name": "Win32_PerfRawData_CitrixICA_ICASession",
+		"alias": "cim_perfcitrix_ica",
+		"check_interval": 300,
+		"tag_properties": [ "Name" ],
+		"stale_timeout": 900,
+		"metrics": [
+			"BytesreceivedoverEDT",
+			"BytessentoverEDT",
+			"EDTbandwidthavailablebps",
+			"EDTcongestionwindowsize",
+			"EDTflowwindowsize",
+			"EDTpacketarrivalratepacketspersecond",
+			"EDTpacketsendingperiodmicroseconds",
+			"EDTpacketsinflight",
+			"EDTreceiverqueuesizeavailable",
+			"EDTRTT",
+			"EDTsenderqueuesizeavailable",
+			"Frequency_Object",
+			"Frequency_PerfTime",
+			"Frequency_Sys100NS",
+			"InputAudioBandwidth",
+			"InputClipboardBandwidth",
+			"InputCOM1Bandwidth",
+			"InputCOM2Bandwidth",
+			"InputCOMBandwidth",
+			"InputControlChannelBandwidth",
+			"InputDriveBandwidth",
+			"InputFontDataBandwidth",
+			"InputHDXMediaStreamforFlashDataBandwidth",
+			"InputHDXMediaStreamforFlashv2DataBandwidth",
+			"InputLicensingBandwidth",
+			"InputLPT1Bandwidth",
+			"InputLPT2Bandwidth",
+			"InputPNBandwidth",
+			"InputPrinterBandwidth",
+			"InputSeamlessBandwidth",
+			"InputSessionBandwidth",
+			"InputSessionCompression",
+			"InputSessionLineSpeed",
+			"InputSmartCardBandwidth",
+			"InputSpeedScreenDataChannelBandwidth",
+			"InputSpeedScreenMultimediaAccelerationBandwidth",
+			"InputTextEchoBandwidth",
+			"InputThinWireBandwidth",
+			"InputTWAINBandwidth",
+			"InputUSBBandwidth",
+			"InputWebrtcRedirectionBandwidth",
+			"LatencyLastRecorded",
+			"LatencySessionAverage",
+			"LatencySessionDeviation",
+			"NumberofEDTACKpacketsreceived",
+			"NumberofEDTACKpacketssent",
+			"NumberofEDTNAKpacketsreceived",
+			"NumberofEDTNAKpacketssent",
+			"NumberofEDTpacketsreceived",
+			"NumberofEDTpacketssent",
+			"NumberoflostincomingEDTpackets",
+			"NumberoflostoutgoingEDTpackets",
+			"NumberofOutoforderEDTpackets",
+			"Numberofoutputbuffersavailable",
+			"Numberofoutputbuffersinuse",
+			"NumberofretransmittedEDTpackets",
+			"OutputAudioBandwidth",
+			"OutputClipboardBandwidth",
+			"OutputCOM1Bandwidth",
+			"OutputCOM2Bandwidth",
+			"OutputCOMBandwidth",
+			"OutputControlChannelBandwidth",
+			"OutputDriveBandwidth",
+			"OutputFontDataBandwidth",
+			"OutputHDXMediaStreamforFlashDataBandwidth",
+			"OutputHDXMediaStreamforFlashv2DataBandwidth",
+			"OutputLicensingBandwidth",
+			"OutputLPT1Bandwidth",
+			"OutputLPT2Bandwidth",
+			"OutputPNBandwidth",
+			"OutputPrinterBandwidth",
+			"OutputSeamlessBandwidth",
+			"OutputSessionBandwidth",
+			"OutputSessionCompression",
+			"OutputSessionLineSpeed",
+			"OutputSmartCardBandwidth",
+			"OutputSpeedScreenDataChannelBandwidth",
+			"OutputSpeedScreenMultimediaAccelerationBandwidth",
+			"OutputTextEchoBandwidth",
+			"OutputThinWireBandwidth",
+			"OutputTWAINBandwidth",
+			"OutputUSBBandwidth",
+			"OutputWebrtcRedirectionBandwidth",
+			"ResourceShares",
+			"Timestamp_Object",
+			"Timestamp_PerfTime",
+			"Timestamp_Sys100NS"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "cim_perfcitrix_cpm",
+		"command": "cim",
+		"class_name": "Win32_PerfRawData_CitrixUserProfileManager_CitrixProfileManagement",
+		"alias": "cim_perfcitrix_cpm",
+		"check_interval": 300,
+		"tag_properties": [ "Name" ],
+		"stale_timeout": 900,
+		"metrics": [
+			"DeleteLocalProfileDuration",
+			"FileLogoffChangeProcessingDuration",
+			"Frequency_Object",
+			"Frequency_PerfTime",
+			"Frequency_Sys100NS",
+			"InitialProfileMigrateDuration",
+			"LocalProfileSetupDuration",
+			"LogoffBytes",
+			"LogoffDuration",
+			"LogonBytes",
+			"LogonDuration",
+			"ProcessedLogoffFiles100KBto1MB",
+			"ProcessedLogoffFiles10KBto100KB",
+			"ProcessedLogoffFiles1KBto10KB",
+			"ProcessedLogoffFiles1MBto5MB",
+			"ProcessedLogoffFilesAbove5MB",
+			"ProcessedLogoffFilesUnder1KB",
+			"ProcessedLogonFiles100KBto1MB",
+			"ProcessedLogonFiles10KBto100KB",
+			"ProcessedLogonFiles1KBto10KB",
+			"ProcessedLogonFiles1MBto5MB",
+			"ProcessedLogonFilesAbove5MB",
+			"ProcessedLogonFilesUnder1KB",
+			"RegistryChangeLogoffProcessingDuration",
+			"StartMonitoringProfile",
+			"StopMonitoringProfile",
+			"Timestamp_Object",
+			"Timestamp_PerfTime",
+			"Timestamp_Sys100NS",
+			"UserstoreLogoffMigrateDuration"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "cim_perfcitrix_gdtvc",
+		"command": "cim",
+		"class_name": "Win32_PerfRawData_Counters_CitrixGDTVC",
+		"alias": "cim_perfcitrix_gdtvc",
+		"check_interval": 300,
+		"tag_properties": [ "Name" ],
+		"stale_timeout": 900,
+		"metrics": [
+			"BytesReceived",
+			"BytesReceivedPerSecond",
+			"BytesSent",
+			"BytesSentPerSecond",
+			"Frequency_Object",
+			"Frequency_PerfTime",
+			"Frequency_Sys100NS",
+			"Timestamp_Object",
+			"Timestamp_PerfTime",
+			"Timestamp_Sys100NS"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "cim_perfcitrix_print",
+		"command": "cim",
+		"class_name": "Win32_PerfRawData_CpSvcexe_CitrixPrinting",
+		"alias": "cim_perfcitrix_print",
+		"check_interval": 300,
+		"tag_properties": [ "Name" ],
+		"stale_timeout": 900,
+		"metrics": [
+			"ActiveEMFJobs",
+			"ActiveEMFStreams",
+			"ActiveJobs",
+			"ActiveRAWJobs",
+			"ActiveRAWStreams",
+			"ActiveStreams",
+			"ActiveXPSJobs",
+			"ActiveXPSStreams",
+			"AverageBytesperJobperInterval",
+			"AverageTimetoPrintperInterval",
+			"BytescompletedperInterval",
+			"BytesTransferredperInterval",
+			"CompressionSavingsperInterval",
+			"Frequency_Object",
+			"Frequency_PerfTime",
+			"Frequency_Sys100NS",
+			"JobsCompletedperInterval",
+			"JobsCreatedperInterval",
+			"JobsFailedperInterval",
+			"MaximumEMFPrintingTime",
+			"MaximumPrintingTime",
+			"MaximumRAWPrintingTime",
+			"MaximumXPSPrintingTime",
+			"MinimumEMFPrintingTime",
+			"MinimumPrintingTime",
+			"MinimumRAWPrintingTime",
+			"MinimumXPSPrintingTime",
+			"Timestamp_Object",
+			"Timestamp_PerfTime",
+			"Timestamp_Sys100NS",
+			"TotalBytesCompleted",
+			"TotalBytesTransferred",
+			"TotalCompressionSavings",
+			"TotalEMFBytesCompleted",
+			"TotalEMFBytesTransferred",
+			"TotalEMFJobsCompleted",
+			"TotalEMFJobsCreated",
+			"TotalEMFJobsFailed",
+			"TotalJobsCompleted",
+			"TotalJobsCreated",
+			"TotalJobsFailed",
+			"TotalRAWBytesCompleted",
+			"TotalRAWBytesTransferred",
+			"TotalRAWJobsCompleted",
+			"TotalRAWJobsCreated",
+			"TotalRAWJobsFailed",
+			"TotalXPSBytesCompleted",
+			"TotalXPSBytesTransferred",
+			"TotalXPSJobsCompleted",
+			"TotalXPSJobsCreated",
+			"TotalXPSJobsFailed"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "cim_ctxsf_events",
+		"alias": "cim_ctxsf_events",
+		"logfile": "Citrix Delivery Services",
+		"use": [
+			"template_cim_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_login",
+		"command": "odata_ctx_events",
+		"alias": "ctx_login",
+		"check_interval": 300,
+		"time_property": "StartDate",
+		"entity": "Sessions",
+		"expand": "User,Machine,CurrentConnection",
+		"filter": {
+			"Fn::join": [[
+				"StartDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"' and ExitCode eq 1"
+			]]
+		},
+		"tags": {
+			"event_type": "login",
+			"job": { "Fn::ref": [ "tags.job" ] },
+			"logfile": "ctx_logs"
+		},
+		"tag_property": {
+			"sessionkey": "SessionKey",
+			"userupn": "User.Upn",
+			"machinednsname": "Machine.DnsName"
+		},
+		"stale_timeout": 900,
+		"metrics": [
+			"ls_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_logoff",
+		"command": "odata_ctx_events",
+		"alias": "ctx_logoff",
+		"check_interval": 300,
+		"time_property": "EndDate",
+		"entity": "Sessions",
+		"expand": "User,Machine,Connections",
+		"filter": {
+			"Fn::join": [[
+				"EndDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"' and ExitCode eq 1"
+			]]
+		},
+		"tags": {
+			"event_type": "logoff",
+			"job": { "Fn::ref": [ "tags.job" ] },
+			"logfile": "ctx_logs"
+		},
+		"tag_property": {
+			"userupn": "User.Upn",
+			"machinednsname": "Machine.DnsName",
+			"sessionkey": "SessionKey"
+		},
+		"stale_timeout": 900,
+		"metrics": [
+			"ls_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_loginfail",
+		"command": "odata_ctx_events",
+		"alias": "ctx_loginfail",
+		"check_interval": 300,
+		"time_property": "EndDate",
+		"entity": "Sessions",
+		"expand": "User,Machine",
+		"filter": {
+			"Fn::join": [[
+				"EndDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"' and ExitCode ne 1"
+			]]
+		},
+		"tags": {
+			"event_type": "loginfail",
+			"job": { "Fn::ref": [ "tags.job" ] },
+			"logfile": "ctx_logs"
+		},
+		"tag_property": {
+			"userupn": "User.Upn",
+			"machinednsname": "Machine.DnsName",
+			"sessionkey": "SessionKey"
+		},
+		"stale_timeout": 900,
+		"metrics": [
+			"ls_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_sessionevent",
+		"command": "odata_ctx_events",
+		"alias": "ctx_sessionevent",
+		"check_interval": 300,
+		"time_property": "ConnectionStateChangeDate",
+		"entity": "Sessions",
+		"expand": "User,Machine,CurrentConnection",
+		"filter": {
+			"Fn::join": [[
+				"ConnectionStateChangeDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"'"
+			]]
+		},
+		"tags": {
+			"event_type": "sessionchange",
+			"job": { "Fn::ref": [ "tags.job" ] },
+			"logfile": "ctx_logs"
+		},
+		"tag_property": {
+			"userupn": "User.Upn",
+			"machinednsname": "Machine.DnsName",
+			"sessionkey": "SessionKey",
+			"connectionstate": "ConnectionState"
+		},
+		"stale_timeout": 900,
+		"metrics": [
+			"ls_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_machinefail",
+		"alias": "ctx_machinefail",
+		"command": "odata_ctx_director",
+		"tag_properties": [
+			"Machine.DnsName",
+			"Machine.HostingServerName",
+			"Machine.HostedMachineName",
+			"Machine.AssociatedUserUPNs",
+			"Machine.CurrentPowerState",
+			"Machine.CurrentRegistrationState",
+			"Machine.ControllerDnsName",
+			"FaultState"
+		],
+		"check_interval": 300,
+		"stale_timeout": 900,
+		"entity": "MachineFailureLogs",
+		"expand": "Machine",
+		"filter": {
+			"Fn::join": [[
+				"FailureEndDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"'"
+			]]
+		},
+		"metrics": [
+			"FaultState",
+			"FailureStartDate",
+			"FailureEndDate",
+			"LastDeregisteredCode"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_machinefaillog",
+		"alias": "ctx_machinefaillog",
+		"command": "odata_ctx_events",
+		"check_interval": 300,
+		"time_property": "CreatedDate",
+		"entity": "MachineFailureLogs",
+		"expand": "Machine",
+		"filter": {
+			"Fn::join": [[
+				"FailureEndDate gt DateTime'",
+				{ "Fn::edmsecondsfromnow": [ 300 ] },
+				"'"
+			]]
+		},
+		"tags": {
+			"event_type": "machinefaillog",
+			"job": { "Fn::ref": [ "tags.job" ] },
+			"logfile": "ctx_logs"
+		},
+		"tag_property": {
+			"machinednsname": "Machine.DnsName"
+		},
+		"stale_timeout": 900,
+		"metrics": [
+			"ls_events"
+		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_machineinfail",
+		"alias": "ctx_machineinfail",
+		"command": "odata_ctx_director",
+		"tag_properties": [
+			"Machine.DnsName",
+			"Machine.HostingServerName",
+			"Machine.HostedMachineName",
+			"Machine.AssociatedUserUPNs",
+			"Machine.CurrentPowerState",
+			"Machine.CurrentRegistrationState",
+			"Machine.ControllerDnsName",
+			"Machine.DesktopGroupId",
+			"FaultState",
+			"LastDeregisteredCode"
+		],
+		"check_interval": 300,
+		"stale_timeout": 900,
+		"entity": "MachineFailureLogs",
+		"expand": "Machine",
+		"filter": {
+			"Fn::join": [[
+				"FailureEndDate eq null"
+			]]
+		},
+		"metrics": [
+			"FaultState",
+			"FailureStartDate"
+		]
+	}
+]
