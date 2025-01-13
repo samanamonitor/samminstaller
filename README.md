@@ -1,11 +1,3 @@
-# SAMM implemented as a Docker Compose
-This implementation requires only to copy this folder structure into 
-`/usr/local/samm`
-From there, all variables need to be set inside
-`/usr/local/samm/config/env`
-To configure samm-collector edit the files at
-`/usr/local/samm/config/samm`
-
 # Docker recommended configuration
 It is important to have a separate partition for Docker with enough storage to hold all the necessary data for history.
 If implemented with s3 storage backend, it may not be necessary to have a big partition for it.
@@ -17,3 +9,13 @@ If implemented with s3 storage backend, it may not be necessary to have a big pa
 		"max-file": "3"
 	}
 }`
+
+# SAMM implemented as a Docker Compose
+Implementation instructions:
+1. Create base directory
+- `mkdir -p /usr/local/samm`
+2. Copy all the files into `/usr/local/samm`
+- `cp -R * /usr/local/samm`
+3. Set all the environment variables in the env files
+- `/usr/local/samm/config/env`
+4. To configure samm-server, edit the files at `/usr/local/samm/config/samm`
