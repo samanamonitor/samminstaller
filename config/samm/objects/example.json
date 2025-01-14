@@ -1,7 +1,8 @@
 [
 	{
+		"register": false,
 		"object_type": "discovery",
-		"use": "discovery_domain_local",
+		"use": "discovery_ldap",
 		"name": "all",
 		"ldap_base": "DC=domain,DC=local",
 		"object_use": [ 
@@ -60,12 +61,12 @@
 		},
 		"community": "<replace with snmp community>",
 		"checks": [ 
-			"snmp_ipstats", 
-			"snmp_ifstats", 
-			"snmp_vserver", 
-			"snmp_certkey", 
-			"snmp_ns", 
-			"snmp_appfw" 
+			"snmp_ns_ipstats", 
+			"snmp_ns_ifstats", 
+			"snmp_ns_vserverstats", 
+			"snmp_ns_certkey", 
+			"snmp_ns_info", 
+			"snmp_ns_appfwstats" 
 		],
 		"stale_timeout": 432000,
 		"register": false
