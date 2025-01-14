@@ -8,11 +8,11 @@ common:
   storage:
     backend: s3
     s3:
-      endpoint: minio:9000
+      endpoint: ${S3_BACKEND}
       access_key_id: ${MINIO_ROOT_USER}
       secret_access_key: ${MINIO_ROOT_PASSWORD}
-      insecure: true
-      bucket_name: mimir
+      insecure: ${S3_INSECURE}
+      bucket_name: ${S3_MIMIR_BUCKET_NAME}
 
 # Blocks storage requires a prefix when using a common object storage bucket.
 blocks_storage:

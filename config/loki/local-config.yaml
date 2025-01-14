@@ -8,11 +8,11 @@ common:
   storage:
     s3:
       endpoint: minio:9000
-      bucketnames: samm-loki
+      bucketnames: ${S3_LOKI_BUCKET_NAME}
       s3forcepathstyle: true
       access_key_id: ${MINIO_ROOT_USER}
       secret_access_key: ${MINIO_ROOT_PASSWORD}
-      insecure: true
+      insecure: ${S3_INSECURE}
   replication_factor: 1
   ring:
     kvstore:
