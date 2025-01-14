@@ -4,17 +4,10 @@
     "config_dir": "etc",
     "sock_file": "/tmp/samm.sock",
     "resource_file": "resources.json",
-    "object_files":[
-        "objects/commands.json", 
-        "objects/checks-citrix.json",
-        "objects/checks-generic.json", 
-        "objects/checks-windows.json",
-        "objects/checks-netscaler.json",
-        "objects/aws.json",
-        "objects/instance-templates.json"
-    ],
+    "object_files": [],
     "object_dirs": [
-        "objects/environment"
+        "base",
+        "objects"
     ],
     "webserver": true,
     "webserver_port": 5000,
