@@ -2,6 +2,8 @@
         "aws": {
                 "region_name": "us-east-1"
         },
+        "cim_username": "<windows domain username>",
+        "cim_password": "<windows domain password>",
         "prometheus_remote_write": {
                 "url": "http://mimir:8080/api/v1/push",
                 "org_id": "samana"
