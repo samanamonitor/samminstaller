@@ -3,6 +3,12 @@
 INSTALL_DIR=/usr/local/samm
 SAMM_OWNER=$(whoami)
 
+SUDO=$(which sudo)
+if [ "$?" != "0" ]; then
+	echo "Mandatory 'sudo' command is missing" >&2
+	exit 1
+fi
+
 OPENSSL=$(which openssl)
 if [ "$?" != "0" ]; then
 	echo "Mandatory 'openssl' command is missing" >&2
