@@ -26,7 +26,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 set -e
 sudo mkdir -p ${INSTALL_DIR}
-sudo chown ${SAMM_OWNER}.docker ${INSTALL_DIR}
+sudo chown ${SAMM_OWNER}:docker ${INSTALL_DIR}
 
 cp -R ${DIR}/* ${INSTALL_DIR}
 cd ${INSTALL_DIR}
