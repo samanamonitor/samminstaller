@@ -132,7 +132,6 @@ services:
       mode: replicated
       replicas: 1
     command: [ "/usr/local/bin/server.py", "/usr/local/samm/etc/conf.json" ]
-    hostname: samm-scheduler
     env_file:
       - ./config/env/samm.env
     restart: on-failure:3

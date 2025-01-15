@@ -1,5 +1,7 @@
 {
-    "debug": "INFO",
+    "log_level": {
+        "samm.service": "INFO"
+    },
     "base_dir": "/usr/local/samm/",
     "config_dir": "etc",
     "sock_file": "/tmp/samm.sock",

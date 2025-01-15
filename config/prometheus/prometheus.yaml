@@ -14,6 +14,11 @@ scrape_configs:
     - "mimir:8080"
     # - "vmware-collector:9272"
     # - "mq:15692"
+- job_name: samm
+  honor_labels: true
+  static_configs:
+  - targets:
+    - "samm-server:5000"
 
 remote_write:
   - url: http://mimir:8080/api/v1/push

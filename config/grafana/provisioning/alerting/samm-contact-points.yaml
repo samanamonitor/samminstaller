@@ -6,6 +6,6 @@ contactPoints:
         - uid: ce7ed779-a88d-4ac4-9f46-2d767eaaa669
           type: slack
           settings:
-            recipient: alerts-mmm
+            recipient: alerts-customer
             token: xxx
           disableResolveMessage: false
