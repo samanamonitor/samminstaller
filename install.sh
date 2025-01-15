@@ -4,13 +4,13 @@ INSTALL_DIR=/usr/local/samm
 SAMM_OWNER=$(whoami)
 
 OPENSSL=$(which openssl)
-if "$?" != "0"; then
+if [ "$?" != "0" ]; then
 	echo "Mandatory 'openssl' command is missing" >&2
 	exit 1
 fi
 
 DOCKER=$(which docker)
-if "$?" != "0"; then
+if [ "$?" != "0" ]; then
 	echo "Mandatory 'docker' command is missing" >&2
 	exit 1
 fi
