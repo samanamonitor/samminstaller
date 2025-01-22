@@ -16,5 +16,8 @@ Implementation instructions:
 2. change directory to `/usr/local/samm`
 3. Set all the environment variables in the env files
 - `/usr/local/samm/config/env`
+4. Clone the dashboard git repository into `/usr/local/samm/config/grafana/provisioning/dashboards`
+- `cd /usr/local/samm/config/grafana/provisioning/dashboards`
+- `git clone https://github.com/samanamonitor/samm-dhashboards`
 4. To configure samm-server, edit the files at `/usr/local/samm/config/samm`
 5. run `docker compose up -d`
