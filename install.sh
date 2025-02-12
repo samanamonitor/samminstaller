@@ -21,6 +21,17 @@ if [ "$?" != "0" ]; then
 	exit 1
 fi
 
+DOCKER=$(which docker)
+if [ "$?" != "0" ]; then
+	echo "Mandatory 'docker' command is missing" >&2
+	exit 1
+fi
+
+JQ=$(which jq)
+if [ "$?" != "0" ]; then
+	echo "Mandatory 'jq' command is missing" >&2
+	exit 1
+fi
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
