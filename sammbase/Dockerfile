@@ -7,4 +7,5 @@ pip install git+https://github.com/samanamonitor/pysammsnmp.git
 pip install git+https://github.com/samanamonitor/pysammwr.git
 pip install git+https://github.com/samanamonitor/pysammodata.git
 pip install git+https://github.com/samanamonitor/pysammaws.git
+pip install pykerberos
 EOF
