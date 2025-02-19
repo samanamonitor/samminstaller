@@ -35,7 +35,8 @@
 					]]
 				},
 			"username": { "Fn::ref": [ "resources.cim_username" ] },
-			"password": { "Fn::ref": [ "resources.cim_password" ] }
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"transport": { "Fn::ref": [ "resources.cim_transport" ] }
 		}
 	},
 	{
@@ -52,7 +53,8 @@
 					]]
 				},
 			"username": { "Fn::ref": [ "resources.cim_username" ] },
-			"password": { "Fn::ref": [ "resources.cim_password" ] }
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"transport": { "Fn::ref": [ "resources.cim_transport" ] }
 		}
 	},
 	{
@@ -104,7 +106,8 @@
 					]]
 				},
 			"username": { "Fn::ref": [ "resources.cim_username" ] },
-			"password": { "Fn::ref": [ "resources.cim_password" ] }
+			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"transport": { "Fn::ref": [ "resources.cim_transport" ] }
 		}
 	},
 	{
@@ -123,6 +126,7 @@
 				},
 			"username": { "Fn::ref": [ "resources.cim_username" ] },
 			"password": { "Fn::ref": [ "resources.cim_password" ] },
+			"transport": { "Fn::ref": [ "resources.cim_transport" ] },
 			"logfile": { "Fn::ref": [ "check.logfile" ] },
 			"event_type": { "Fn::ref": [ "check.event_type" ] },
 			"time_property": { "Fn::ref": [ "check.time_property" ] },

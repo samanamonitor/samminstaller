@@ -29,3 +29,12 @@ git clone https://github.com/samanamonitor/samm-dashboards
 # SAMM Configuration settings
 * run `sammmanager/install.sh <SAMMFQDN> <ORGNAME>`
 * set the organization name in grafana to <ORGNAME>
+
+# Kerberos authentication
+For kerberos authentication it is recommended to generate a keytab file instead of using username and password.
+To generate the keytab file, execute the following command:
+```
+ktpass /out samm.keytab /princ <USERNAME>@<REALM> /mapuser <USERNAME> /pass +rndPass /ptype KRB5_NT_PRINCIPAL /crypto AES256-SHA1
+```
+The file generated `samm.keytab` needs to be copied into `/usr/local/samm/config/samm` folder
+Then, edit the config/env/samm.env file and enable the KRB5_CLIENT_KTNAME environment variable
