@@ -25,3 +25,7 @@ git clone https://github.com/samanamonitor/samm-dashboards
 ```
 5. To configure samm-server, edit the files at `/usr/local/samm/config/samm`
 6. run `docker compose up -d`
+
+# SAMM Configuration settings
+* run `sammmanager/install.sh <SAMMFQDN> <ORGNAME>`
+* set the organization name in grafana to <ORGNAME>
