@@ -28,7 +28,7 @@ git clone https://github.com/samanamonitor/samm-dashboards
 
 # SAMM Configuration settings
 * run `sammmanager/install.sh <SAMMFQDN> <ORGNAME>`
-* set the organization name in grafana to <ORGNAME>
+* set the organization name in grafana to `<ORGNAME>`
 
 # Kerberos authentication
 For kerberos authentication it is recommended to generate a keytab file instead of using username and password.
@@ -38,3 +38,10 @@ ktpass /out samm.keytab /princ <USERNAME>@<REALM> /mapuser <USERNAME> /pass +rnd
 ```
 The file generated `samm.keytab` needs to be copied into `/usr/local/samm/config/samm` folder
 Then, edit the config/env/samm.env file and enable the KRB5_CLIENT_KTNAME environment variable
+
+# LDAP Kerberos authentication
+#
+# If PTR records for the ip address of domain controllers are pointing to the domain instead of the host name
+# these records should be deleted. If they can't be deleted, krb5.conf file must contain the following lines
+[libdefaults]
+   rdns = false
