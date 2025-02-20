@@ -7,6 +7,7 @@
 		"register": false,
 		"ldap_url": { "Fn::ref": [ "resources.ldap_url", "" ] },
 		"ldap_dn": { "Fn::ref": [ "resources.ldap_dn", "" ] },
+		"ldap_bindmethod": { "Fn::ref": [ "resources.ldap_bindmethod", "simple" ] },
 		"ldap_password": { "Fn::ref": [ "resources.ldap_password", "" ] },
 		"ldap_base": { "Fn::ref" : [ "resources.ldap_base", "" ] },
 		"ldap_scope": "SCOPE_SUBTREE",
