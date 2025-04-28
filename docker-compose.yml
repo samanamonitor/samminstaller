@@ -163,6 +163,20 @@ services:
       - /usr/src:/usr/src
       - ./config/samm:/usr/local/samm/etc
 
+  # repeat this service for each pool
+  # if each pool uses the same username and password, then use the sammxen.env
+  # remember to replace poolmaster_ip with the pool master IP
+  samm-xen-1:
+    build: ./sammxen
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 0
+    env_file:
+      - ./config/env/sammxen.env
+    environment:
+      XEN_HOST: "poolmaster_ip"
+
 # VmWare Monitoring
 # * enable the following section only if VMWare is to be monitored
 #  vmware-collector:

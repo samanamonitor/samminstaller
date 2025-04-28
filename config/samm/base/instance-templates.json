@@ -55,9 +55,16 @@
 			"cim_perfcpu",
 			"cim_certificates",
 			"cim_computer",
-			"cim_system_events",
-			"cim_application_events",
 			"cim_service"
+		],
+		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "template_windows_events",
+		"checks": [
+			"cim_system_events",
+			"cim_application_events"
 		],
 		"register": false
 	},

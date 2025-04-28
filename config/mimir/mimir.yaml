@@ -43,3 +43,6 @@ alertmanager:
 #  fallback_config_file: /etc/alertmanager-fallback-config.yaml
   external_url: http://localhost:8080/alertmanager
 
+limits:
+  max_global_series_per_user: 0
+  ingestion_rate: 100000
