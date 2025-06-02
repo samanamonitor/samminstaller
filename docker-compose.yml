@@ -137,6 +137,9 @@ services:
     command: [ "/usr/local/bin/server.py", "/usr/local/samm/etc/conf.json" ]
     env_file:
       - ./config/env/samm.env
+    environment:
+      - PYTHONPATH=/app
+    working_dir: /app
     volumes:
       - ./config/samm:/usr/local/samm/etc
 
