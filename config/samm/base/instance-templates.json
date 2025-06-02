@@ -158,5 +158,17 @@
 			"cim_perfcitrix_print"
 		],
 		"register": false
+	},
+	{
+		"object_type": "instance",
+		"name": "citrixcloud",
+		"alias": "citrixcloud",
+		"checks": [
+			"ctxcl_machines",
+			"ctxcl_sessions"
+		],
+		"check_if_down": true,
+		"address": "localhost",
+		"register": false
 	}
 ]

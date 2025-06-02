@@ -184,5 +184,18 @@
 			"time_property": { "Fn::ref": [ "check.time_property" ] },
 			"tags": { "Fn::ref": [ "check.tags" ] }
 		}
+	},
+		{
+		"object_type": "command",
+		"name": "odata4_ctx_cloud",
+		"type": "sammcitrixcloud.SammOdataCitrixCloud",
+		"args": {
+			"customer_id": { "Fn::ref": [ "resources.citrixcloud.customer_id" ] },
+			"client_id": { "Fn::ref": [ "resources.citrixcloud.client_id" ] },
+			"client_secret": { "Fn::ref": [ "resources.citrixcloud.client_secret" ] },
+			"entity": { "Fn::ref": [ "check.entity" ] },
+			"expand": { "Fn::ref": [ "check.expand" ] },
+			"filter": { "Fn::ref": [ "check.filter" ] }
+		}
 	}
 ]

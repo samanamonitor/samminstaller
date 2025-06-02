@@ -533,5 +533,21 @@
 			"FaultState",
 			"FailureStartDate"
 		]
+	},
+	{
+		"object_type": "check",
+		"name": "ctxcl_machines",
+		"use": [
+			"ctx_machines"
+		],
+		"command": "odata4_ctx_cloud"
+	},
+	{
+		"object_type": "check",
+		"name": "ctxcl_sessions",
+		"use": [
+			"ctx_sessions"
+		],
+		"command": "odata4_ctx_cloud"
 	}
 ]
