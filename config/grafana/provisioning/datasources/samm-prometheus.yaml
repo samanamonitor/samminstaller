@@ -6,32 +6,53 @@ datasources:
     uid: c3a5e98c-6e94-44b8-b894-ae05241051b7
     url: http://mimir:8080/prometheus
     access: proxy
+    editable: true
     jsonData:
       httpHeaderName1: X-Scope-OrgID
+      httpMethod: POST
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 2.44.0
+      cacheLevel: 'High'
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m
     secureJsonData:
       httpHeaderValue1: samana
-    httpMethod: POST
-    manageAlerts: true
-    prometheusType: Prometheus
-    prometheusVersion: 2.44.0
-    cacheLevel: 'High'
-    disableRecordingRules: false
-    incrementalQueryOverlapWindow: 10m
+
   - name: samm-loki
     type: loki
     uid: a3b388bb-5990-45ca-a5b5-0bca47387fe1
     url: http://loki:3100
     access: proxy
+    editable: true
     jsonData:
       timeout: 60
       maxLines: 1000
-  - uid: "fe37eb96-e778-4098-b04d-bf73e9683d48"
-    orgId: 1
-    name: samm-config
+
+  - name: samm-config
     type: "yesoreyeram-infinity-datasource"
+    uid: "fe37eb96-e778-4098-b04d-bf73e9683d48"
+    orgId: 1
     basicAuth: false
     basicAuthUser: ""
     isDefault: false
+    editable: true
     jsonData:
       global_queries: []
     readOnly: false
+
+  - name: citrix-monitor
+    type: mssql
+    url: localhost:1433
+    user: grafana
+    editable: true
+    jsonData:
+      database: grafana
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleConnsAuto: true
+      connMaxLifetime: 14400
+      connectionTimeout: 0
+      encrypt: 'false'
+    secureJsonData:
+      password: 'Password!'
