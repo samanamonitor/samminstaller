@@ -178,6 +178,7 @@ services:
       replicas: 0
     env_file:
       - ./config/env/sammxen.env
+    command: [ "/app/config.json" ]
     environment:
       XEN_HOST: "poolmaster_ip"
 
