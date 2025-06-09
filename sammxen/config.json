@@ -1,0 +1,99 @@
+{
+    "info_labels": {
+        "vm": {
+            "uuid": "uuid",
+            "name_label": "name_label",
+            "power_state": "power_state",
+            "resident_on": "resident_on",
+            "guest_metrics": "guest_metrics"
+        },
+        "vm_guest_metrics": {
+            "uuid": "uuid",
+            "os_version_distro": "os_version.distro",
+            "os_version_major": "os_version.major",
+            "os_version_minor": "os_version.minor",
+            "os_version_build": "os_version.build",
+            "netbios_name": "netbios_name.host_name",
+            "PV_drivers_version_major": "PV_drivers_version.major",
+            "PV_drivers_version_minor": "PV_drivers_version.minor",
+            "PV_drivers_version_micro": "PV_drivers_version.micro",
+            "PV_drivers_version_build": "PV_drivers_version.build",
+            "networks": "networks"
+        },
+        "host": {
+            "uuid": "uuid",
+            "name_label": "name_label",
+            "API_version_major": "API_version_major",
+            "API_version_minor": "API_version_minor",
+            "API_version_vendor": "API_version_vendor",
+            "product_version": "software_version.product_version",
+            "platform_name": "software_version.platform_name",
+            "platform_version": "software_version.platform_version",
+            "xapi_version": "software_version.xapi",
+            "xapi_build": "software_version.xapi_build",
+            "xen_version": "software_version.xen",
+            "linux_version": "software_version.linux",
+            "network_backend": "software_version.network_backend",
+            "db_schema": "software_version.db_schema",
+            "cpu_count": "cpu_info.cpu_count",
+            "socket_count": "cpu_info.socket_count",
+            "threads_per_core": "cpu_info.threads_per_core",
+            "cpu_vendor": "cpu_info.vendor",
+            "cpu_speed": "cpu_info.speed",
+            "cpu_modelname": "cpu_info.modelname",
+            "multipathing": "other_config.multipathing",
+            "mpath_boot": "other_config.mpath_boot",
+            "hostname": "hostname",
+            "address": "address",
+            "bios_vendor": "bios_strings.bios-vendor",
+            "bios_version": "bios_strings.bios-version",
+            "system_manufacturer": "bios_strings.system-manufacturer",
+            "system_product_name": "bios_strings.system-product-name",
+            "system_serial_number": "bios_strings.system-serial-number",
+            "pool_uuid": "pool_uuid"
+        },
+        "sr": {
+            "uuid": "uuid",
+            "name_label": "name_label",
+            "sr_uuid": "sr_uuid"
+        },
+        "pool": {
+            "uuid": "uuid",
+            "name_label": "name_label",
+            "master": "master",
+            "ha_enabled": "ha_enabled",
+            "wlb_enabled": "wlb_enabled",
+            "wlb_url": "wlb_url"
+        }
+    },
+    "static_metrics": {
+        "vm": {
+            "memory_overhead": "memory_overhead",
+            "memory_static_max": "memory_static_max",
+            "memory_dynamic_max": "memory_dynamic_max",
+            "memory_dynamic_min": "memory_dynamic_min",
+            "memory_static_min": "memory_static_min",
+            "vcpus_at_startup": "VCPUs_at_startup"
+        },
+        "host": {
+            "agent_start_time": "other_config.agent_start_time",
+            "boot_time": "other_config.boot_time",
+            "last_software_update": "last_software_update"
+        },
+        "host_metrics": {
+            "memory_total": "memory_total",
+            "memory_free": "memory_free",
+            "last_updated": "last_updated"
+        },
+        "sr": {
+            "physical_size": "physical_size",
+            "physical_utilisation": "physical_utilisation",
+            "virtual_allocation": "virtual_allocation"
+        }
+    },
+    "extra_metric_labels": {
+        "host": [ "name_label" ],
+        "vm": [ "name_label" ],
+        "vm_guest_metrics": []
+    }
+}
