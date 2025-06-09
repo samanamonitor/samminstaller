@@ -181,6 +181,8 @@ services:
     command: [ "/app/config.json" ]
     environment:
       XEN_HOST: "poolmaster_ip"
+    volumes:
+      - ./config/sammxen/config.json:/app/config.json
 
 # VmWare Monitoring
 # * enable the following section only if VMWare is to be monitored
