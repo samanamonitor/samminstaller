@@ -129,8 +129,20 @@ services:
       samm-manager:
         condition: service_started
 
+  samm-host:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: samm_host
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
   samm-server:
     build: ./sammbase
+    image: sammbase
     restart: on-failure:3
     deploy:
       mode: replicated
@@ -155,7 +167,7 @@ services:
       - ./config/manager/conf.json:/app/conf.json
 
   samm-test:
-    build: ./sammbase
+    image: sammbase
     command: [ "/bin/bash" ]
     hostname: samm-test
     stdin_open: true
@@ -172,6 +184,7 @@ services:
   # remember to replace poolmaster_ip with the pool master IP
   samm-xen-1:
     build: ./sammxen
+    image: samm-xen
     restart: on-failure:3
     deploy:
       mode: replicated
