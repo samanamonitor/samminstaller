@@ -3,10 +3,10 @@
 # Added by Diego Madiedo - Samana Group - 20-Jun2025
 # Variable added for setting the theme when installing SAMM
 #
-# THEME_VERSION= Either "light" or "dark"
+# THEME_VERSION= Set by default as "dark"
 # COMPANY_NAME= Name of the client company, used in the title and branding
 # Example:
-#    docker build --build-arg --build-arg THEME_VERSION=light --build-arg COMPANY_NAME="Client"
+#    docker build --build-arg COMPANY_NAME="Client"
 # 
 ######
 ARG THEME_VERSION="dark"
