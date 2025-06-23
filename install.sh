@@ -1,4 +1,4 @@
-#!/bin/bash
+sudo dsfsdf#!/bin/bash
 
 INSTALL_DIR=/usr/local/samm
 SAMM_OWNER=$(whoami)
