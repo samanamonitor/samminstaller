@@ -1,17 +1,3 @@
-######
-#
-# Added by Diego Madiedo - Samana Group - 20-Jun2025
-# Variable added for setting the theme when installing SAMM
-#
-# THEME_VERSION= Set by default as "dark"
-# COMPANY_NAME= Name of the client company, used in the title and branding
-# Example:
-#    docker build --build-arg COMPANY_NAME="Client"
-# 
-######
-ARG THEME_VERSION="dark"
-ARG COMPANY_NAME="Client_Name"
-
 FROM grafana/grafana:latest
 
 ######
@@ -28,9 +14,9 @@ USER root
 ##################################################################
 # VISUAL CUSTOMIZATION - Replace branding assets
 ##################################################################
-COPY --chown=grafana:root ../config/grafana/img/fav32_${THEME_VERSION}.png /usr/share/grafana/public/img/fav32.png
-COPY --chown=grafana:root ../config/grafanaimg/apple-touch-icon_${THEME_VERSION}.png /usr/share/grafana/public/img/apple-touch-icon.png
-COPY --chown=grafana:root ../config/grafanaimg/grafana_icon_${THEME_VERSION}.svg /usr/share/grafana/public/img/grafana_icon.svg
+COPY --chown=grafana:root /img/fav32_dark.png /usr/share/grafana/public/img/fav32.png
+COPY --chown=grafana:root /img/apple-touch-icon_dark.png /usr/share/grafana/public/img/apple-touch-icon.png
+COPY --chown=grafana:root /img/grafana_icon_dark.svg /usr/share/grafana/public/img/grafana_icon.svg
 # In case we want to change the login background
 # COPY --chown=grafana:root ../config/grafana/img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
 # COPY --chown=grafana:root ../config/grafana/img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
@@ -39,12 +25,12 @@ COPY --chown=grafana:root ../config/grafanaimg/grafana_icon_${THEME_VERSION}.svg
 # HTML & JS CUSTOMIZATION - Update titles, menus, and branding
 ##################################################################
 # Update title and loading text in index.html
-RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SAMM - ${COMPANY_NAME}</title>|g' /usr/share/grafana/public/views/index.html && \
+RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SAMM - Samana Group</title>|g' /usr/share/grafana/public/views/index.html && \
     sed -i 's|Loading Grafana|Loading SAMM|g' /usr/share/grafana/public/views/index.html
 	
 	# Update JavaScript files for branding and feature toggles
 RUN find /usr/share/grafana/public/build/ -name "*.js" -type f \
-    -exec sed -i 's|AppTitle="Grafana"|AppTitle="SAMM - ${COMPANY_NAME}"|g' {} \; \
+    -exec sed -i 's|AppTitle="Grafana"|AppTitle="SAMM - Samana Group"|g' {} \; \
     -exec sed -i 's|LoginTitle="Welcome to Grafana"|LoginTitle="Welcome to SAMM"|g' {} \; \
     -exec sed -i 's|\[{target:"_blank",id:"documentation".*grafana_footer"}\]|\[\]|g' {} \; \
     -exec sed -i 's|({target:"_blank",id:"license",.*licenseUrl})|()|g' {} \; \
