@@ -93,5 +93,3 @@ RUN grafana cli plugins install yesoreyeram-infinity-datasource
 
 # Expose Grafana default port
 EXPOSE 3000
-
-RUN grafana cli plugins install yesoreyeram-infinity-datasource
