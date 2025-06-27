@@ -91,6 +91,48 @@ services:
     volumes:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
 
+  alloy:
+    image: grafana/alloy:latest
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    depends_on:
+      - loki
+      - prometheus
+    ports:
+    # - "12345:12345" - Not published by default, can be accessed via Grafana
+      - "51893:51893"
+      - "51893:51893/udp"
+    volumes:
+      - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
+      - mimir-data:/data
+  
+  snmp_exporter:
+    image: prom/snmp-exporter:latest
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+    command: --config.file=/etc/snmp/snmp.yml --web.listen-address=:9116 --web.telemetry-path=/metrics
+    ports:
+      - "9116:9116"
+    # - "161:161/udp" - Review if needed
+    volumes:
+      - ./config/snmp/snmp.yml:/etc/snmp/snmp.yml
+
+# Added configuration generator for snmp_exporter as a profile service, to avoid starting it by default.
+  snmp_configgen:
+    build: ./configgen
+    profiles: [config]
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - ./config/snmp/snmp.yml:/etc/snmp/snmp.yml
+  
   grafana:
     build: ./grafana
     restart: on-failure:3
