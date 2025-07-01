@@ -1,0 +1,198 @@
+---
+auths:
+  public_v1:
+    version: 1
+  public_v2:
+    version: 2
+
+modules:
+  # SNMPv2-MIB for things like sysDescr, sysUpTime, etc.
+  system:
+    walk:
+      - "SNMPv2-MIB::system"
+    lookups:
+      - source_indexes: [sysORIndex]
+        lookup: "SNMPv2-MIB::sysORDescr"
+  # Default IF-MIB interfaces table with ifIndex.
+  if_mib:
+    walk:
+      - "IF-MIB::interfaces"
+      - "IF-MIB::ifXTable"
+    lookups:
+      - source_indexes: [ifIndex]
+        lookup: "IF-MIB::ifAlias"
+      - source_indexes: [ifIndex]
+        # Disambiguate from PaloAlto PAN-COMMON-MIB::ifDescr.
+        lookup: "IF-MIB::ifDescr"
+      - source_indexes: [ifIndex]
+        # Disambiguate from Netscaler NS-ROOT-MIB::ifName.
+        lookup: "IF-MIB::ifName"
+    overrides:
+      ifAlias:
+        ignore: true # Lookup metric
+      ifDescr:
+        ignore: true # Lookup metric
+      ifName:
+        ignore: true # Lookup metric
+      ifType:
+        type: EnumAsInfo
+  # Default IP-MIB with ipv4InterfaceTable for example.
+  ip_mib:
+    walk: [ipv4InterfaceTable]
+
+# UCD-SNMP-MIB
+#
+# University of California, Davis extensions. Commonly used for host
+# metrics. For example, Linux-based systems, DD-WRT, Synology,
+# Mikrotik, Kemp LoadMaster, etc.
+#
+# http://www.net-snmp.org/docs/mibs/UCD-SNMP-MIB.txt
+#
+  ucd_la_table:
+    walk:
+      - 1.3.6.1.4.1.2021.10.1.2 # laNames
+      - 1.3.6.1.4.1.2021.10.1.5 # laLoadInt
+      - 1.3.6.1.4.1.2021.10.1.6 # laLoadFloat
+    lookups:
+      - source_indexes: [laIndex]
+        lookup: laNames
+        drop_source_indexes: true
+  ucd_memory:
+    walk:
+      - 1.3.6.1.4.1.2021.4 # memory
+  ucd_system_stats:
+    walk:
+      - 1.3.6.1.4.1.2021.11 # systemStats
+
+# keepalived
+#
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/KEEPALIVED-MIB.txt
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/VRRP-MIB.txt
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/VRRPv3-MIB.txt
+  keepalived:
+    walk:
+      - vrrpInstanceTable # Table of VRRP instances.
+      - vrrpSyncGroupTable # Table of sync groups.
+      - virtualServerGroupTable # Table of virtual server groups.
+      - virtualServerTable # Table of virtual servers.
+      - realServerTable # Table of real servers. This includes regular real servers and sorry servers.
+      - vrrpRouterStatsTable # Table of VRRP statistics.
+      - vrrpv3StatisticsTable # Table of VRRPv3 statistics.
+    overrides:
+      vrrpSyncGroupScriptMaster:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptBackup:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptFault:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScript:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptStop:
+        ignore: true # Non-metric display string.
+      vrrpInstanceLvsSyncDaemon:
+        ignore: true # Deprecated.
+      vrrpInstanceLvsSyncInterface:
+        ignore: true # Deprecated.
+      vrrpInstanceScriptMaster:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptBackup:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptFault:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptStop:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScript:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptMstrRxLowerPri:
+        ignore: true # Non-metric display string.
+
+# Printer: RFC 3805
+#
+# https://tools.ietf.org/html/rfc3805
+# https://www.iana.org/assignments/ianaprinter-mib/ianaprinter-mib.xhtml
+  printer_mib:
+    walk:
+      - prtGeneralReset
+      - prtConsoleDisable
+      - prtGeneralPrinterName
+      - prtGeneralSerialNumber
+      - prtAlertCriticalEvents
+      - prtAlertAllEvents
+      - prtCoverStatus
+      - prtMarkerLifeCount
+      - prtMarkerPowerOnCount
+      - prtMarkerSuppliesDescription
+      - prtMarkerSuppliesLevel
+      - prtMarkerSuppliesMaxCapacity
+      - prtMarkerSuppliesType
+    lookups:
+      - source_indexes: [hrDeviceIndex, prtMarkerSuppliesIndex]
+        lookup: prtMarkerSuppliesType
+    overrides:
+      prtGeneralReset:
+        type: EnumAsStateSet
+      prtConsoleDisable:
+        type: EnumAsStateSet
+      prtGeneralPrinterName:
+        type: DisplayString
+      prtGeneralSerialNumber:
+        type: DisplayString
+      prtCoverStatus:
+        type: EnumAsStateSet
+      prtMarkerSuppliesDescription:
+        type: DisplayString
+
+#
+# HOST-RESOURCES-MIB
+#
+# http://www.net-snmp.org/docs/mibs/host.html
+  hrSystem:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSystem"
+  hrStorage:
+    walk:
+      - "HOST-RESOURCES-MIB::hrStorage"
+    lookups:
+      - source_indexes: [hrStorageIndex]
+        lookup: "HOST-RESOURCES-MIB::hrStorageDescr"
+      - source_indexes: [hrStorageIndex]
+        lookup: "HOST-RESOURCES-MIB::hrStorageType"
+    overrides:
+      hrStorageIndex:
+        ignore: true
+      hrStorageType:
+        ignore: true
+      hrStorageDescr:
+        ignore: true
+  hrDevice:
+    walk:
+      - "HOST-RESOURCES-MIB::hrDevice"
+    lookups:
+      - source_indexes: [hrDeviceIndex]
+        lookup: "HOST-RESOURCES-MIB::hrDeviceDescr"
+      - source_indexes: [hrDeviceIndex]
+        lookup: "HOST-RESOURCES-MIB::hrDeviceType"
+    overrides:
+      # Remap enums where 1==true, 2==false to become 0==false, 1==true.
+      hrDiskStorageRemoveble:
+        scale: -1.0
+        offset: 2.0
+      hrPrinterStatus:
+        type: EnumAsStateSet
+      hrDeviceIndex:
+        ignore: true
+      hrDeviceType:
+        ignore: true
+      hrDeviceDescr:
+        ignore: true
+      hrProcessorFrwID:
+        ignore: true
+  hrSWRun:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWRun"
+  hrSWRunPerf:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWRunPerf"
+  hrSWInstalled:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWInstalled"
