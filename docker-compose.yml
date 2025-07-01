@@ -131,7 +131,10 @@ services:
       mode: replicated
       replicas: 1
     volumes:
-      - ./config/snmp/snmp.yml:/etc/snmp/snmp.yml
+      - ./config/snmp/generator-samm.yml:/opt/generator.yml
+      - ./config/snmp/samm-mibs:/opt/generator.yml
+      - ./config/snmp:/opt
+    command: generate --no-fail-on-parse-errors
   
   grafana:
     build: ./grafana
