@@ -114,7 +114,8 @@ services:
     restart: on-failure:3
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 0 # SNMP exporter should not be run until the snmp_configgen has been run for the environment
+                  # and the snmp.yml file exists in the config/snmp directory
     command: --config.file=/etc/snmp/snmp.yml --web.listen-address=:9116 --web.telemetry-path=/metrics
     ports:
       - "9116:9116"
@@ -125,7 +126,7 @@ services:
 # Added configuration generator for snmp_exporter as a profile service, to avoid starting it by default.
   snmp_configgen:
     build: ./configgen
-    profiles: [config]
+    profiles: config
     restart: on-failure:3
     deploy:
       mode: replicated
