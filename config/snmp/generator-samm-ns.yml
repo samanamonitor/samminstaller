@@ -1,0 +1,278 @@
+---
+auths:
+  public_v1:
+    version: 1
+  public_v2:
+    version: 2
+
+modules:
+  # SNMPv2-MIB for things like sysDescr, sysUpTime, etc.
+  system:
+    walk:
+      - "SNMPv2-MIB::system"
+    lookups:
+      - source_indexes: [sysORIndex]
+        lookup: "SNMPv2-MIB::sysORDescr"
+  # Default IF-MIB interfaces table with ifIndex.
+  if_mib:
+    walk:
+      - "IF-MIB::interfaces"
+      - "IF-MIB::ifXTable"
+    lookups:
+      - source_indexes: [ifIndex]
+        lookup: "IF-MIB::ifAlias"
+      - source_indexes: [ifIndex]
+        # Disambiguate from PaloAlto PAN-COMMON-MIB::ifDescr.
+        lookup: "IF-MIB::ifDescr"
+      - source_indexes: [ifIndex]
+        # Disambiguate from Netscaler NS-ROOT-MIB::ifName.
+        lookup: "IF-MIB::ifName"
+    overrides:
+      ifAlias:
+        ignore: true # Lookup metric
+      ifDescr:
+        ignore: true # Lookup metric
+      ifName:
+        ignore: true # Lookup metric
+      ifType:
+        type: EnumAsInfo
+  # Default IP-MIB with ipv4InterfaceTable for example.
+  ip_mib:
+    walk: [ipv4InterfaceTable]
+
+# UCD-SNMP-MIB
+#
+# University of California, Davis extensions. Commonly used for host
+# metrics. For example, Linux-based systems, DD-WRT, Synology,
+# Mikrotik, Kemp LoadMaster, etc.
+#
+# http://www.net-snmp.org/docs/mibs/UCD-SNMP-MIB.txt
+#
+  ucd_la_table:
+    walk:
+      - 1.3.6.1.4.1.2021.10.1.2 # laNames
+      - 1.3.6.1.4.1.2021.10.1.5 # laLoadInt
+      - 1.3.6.1.4.1.2021.10.1.6 # laLoadFloat
+    lookups:
+      - source_indexes: [laIndex]
+        lookup: laNames
+        drop_source_indexes: true
+  ucd_memory:
+    walk:
+      - 1.3.6.1.4.1.2021.4 # memory
+  ucd_system_stats:
+    walk:
+      - 1.3.6.1.4.1.2021.11 # systemStats
+
+# keepalived
+#
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/KEEPALIVED-MIB.txt
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/VRRP-MIB.txt
+# https://github.com/acassen/keepalived/blob/v2.2.8/doc/VRRPv3-MIB.txt
+  keepalived:
+    walk:
+      - vrrpInstanceTable # Table of VRRP instances.
+      - vrrpSyncGroupTable # Table of sync groups.
+      - virtualServerGroupTable # Table of virtual server groups.
+      - virtualServerTable # Table of virtual servers.
+      - realServerTable # Table of real servers. This includes regular real servers and sorry servers.
+      - vrrpRouterStatsTable # Table of VRRP statistics.
+      - vrrpv3StatisticsTable # Table of VRRPv3 statistics.
+    overrides:
+      vrrpSyncGroupScriptMaster:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptBackup:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptFault:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScript:
+        ignore: true # Non-metric display string.
+      vrrpSyncGroupScriptStop:
+        ignore: true # Non-metric display string.
+      vrrpInstanceLvsSyncDaemon:
+        ignore: true # Deprecated.
+      vrrpInstanceLvsSyncInterface:
+        ignore: true # Deprecated.
+      vrrpInstanceScriptMaster:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptBackup:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptFault:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptStop:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScript:
+        ignore: true # Non-metric display string.
+      vrrpInstanceScriptMstrRxLowerPri:
+        ignore: true # Non-metric display string.
+
+# Printer: RFC 3805
+#
+# https://tools.ietf.org/html/rfc3805
+# https://www.iana.org/assignments/ianaprinter-mib/ianaprinter-mib.xhtml
+  printer_mib:
+    walk:
+      - prtGeneralReset
+      - prtConsoleDisable
+      - prtGeneralPrinterName
+      - prtGeneralSerialNumber
+      - prtAlertCriticalEvents
+      - prtAlertAllEvents
+      - prtCoverStatus
+      - prtMarkerLifeCount
+      - prtMarkerPowerOnCount
+      - prtMarkerSuppliesDescription
+      - prtMarkerSuppliesLevel
+      - prtMarkerSuppliesMaxCapacity
+      - prtMarkerSuppliesType
+    lookups:
+      - source_indexes: [hrDeviceIndex, prtMarkerSuppliesIndex]
+        lookup: prtMarkerSuppliesType
+    overrides:
+      prtGeneralReset:
+        type: EnumAsStateSet
+      prtConsoleDisable:
+        type: EnumAsStateSet
+      prtGeneralPrinterName:
+        type: DisplayString
+      prtGeneralSerialNumber:
+        type: DisplayString
+      prtCoverStatus:
+        type: EnumAsStateSet
+      prtMarkerSuppliesDescription:
+        type: DisplayString
+
+#
+# HOST-RESOURCES-MIB
+#
+# http://www.net-snmp.org/docs/mibs/host.html
+  hrSystem:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSystem"
+  hrStorage:
+    walk:
+      - "HOST-RESOURCES-MIB::hrStorage"
+    lookups:
+      - source_indexes: [hrStorageIndex]
+        lookup: "HOST-RESOURCES-MIB::hrStorageDescr"
+      - source_indexes: [hrStorageIndex]
+        lookup: "HOST-RESOURCES-MIB::hrStorageType"
+    overrides:
+      hrStorageIndex:
+        ignore: true
+      hrStorageType:
+        ignore: true
+      hrStorageDescr:
+        ignore: true
+  hrDevice:
+    walk:
+      - "HOST-RESOURCES-MIB::hrDevice"
+    lookups:
+      - source_indexes: [hrDeviceIndex]
+        lookup: "HOST-RESOURCES-MIB::hrDeviceDescr"
+      - source_indexes: [hrDeviceIndex]
+        lookup: "HOST-RESOURCES-MIB::hrDeviceType"
+    overrides:
+      # Remap enums where 1==true, 2==false to become 0==false, 1==true.
+      hrDiskStorageRemoveble:
+        scale: -1.0
+        offset: 2.0
+      hrPrinterStatus:
+        type: EnumAsStateSet
+      hrDeviceIndex:
+        ignore: true
+      hrDeviceType:
+        ignore: true
+      hrDeviceDescr:
+        ignore: true
+      hrProcessorFrwID:
+        ignore: true
+  hrSWRun:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWRun"
+  hrSWRunPerf:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWRunPerf"
+  hrSWInstalled:
+    walk:
+      - "HOST-RESOURCES-MIB::hrSWInstalled"
+
+# 
+#
+# Citrix NetScaler MIBs for v.14.1
+#
+# https://developer-docs.netscaler.com/en-us/adc-snmp-oid-reference/current-release.html
+#
+  nssystem: # OID: 1.3.6.1.2.1.1
+    walk:
+      - 1.3.6.1.2.1.1.1 # sysDescr - A textual description of the entity. This value shouldinclude the full name and version identification ofthe system’s hardware type, software operating-system,and networking software.
+      - 1.3.6.1.2.1.1.2 # sysObjectID - The vendor’s authoritative identification of thenetwork management subsystem contained in the entity.This value is allocated within the SMI enterprisessubtree (1.3.6.1.4.1) and provides an easy andunambiguous means for determining what kind of box’ isbeing managed. For example, if vendor Flintstones,Inc.’ was assigned the subtree 1.3.6.1.4.1.424242,it could assign the identifier 1.3.6.1.4.1.424242.1.1to its Fred Router’.
+      - 1.3.6.1.2.1.1.3 # sysUpTime - The time (in hundredths of a second) since thenetwork management portion of the system was lastre-initialized.
+      - 1.3.6.1.2.1.1.4 # sysContact - The textual identification of the contact person forthis managed node, together with information on howto contact this person. If no contact information isknown, the value is the zero-length string.
+      - 1.3.6.1.2.1.1.5 # sysName - An administratively-assigned name for this managednode. By convention, this is the node’s fully-qualifieddomain name. If the name is unknown, the value isthe zero-length string.
+      - 1.3.6.1.2.1.1.6 # sysLocation - The physical location of this node (e.g., ‘telephonecloset, 3rd floor’). If the location is unknown, thevalue is the zero-length string.
+      - 1.3.6.1.2.1.1.7 # sysServices - A value which indicates the set of services that thisentity may potentially offer. The value is a sum.This sum initially takes the value zero. Then, foreach layer, L, in the range 1 through 7, that this nodeperforms transactions for, 2 raised to (L - 1) is addedto the sum. For example, a node which performs onlyrouting functions would have a value of 4 (2^(3-1)).In contrast, a node which is a host offering applicationservices would have a value of 72 (2^(4-1) + 2^(7-1)).Note that in the context of the Internet suite ofprotocols, values should be calculated accordingly:layer functionality1 physical (e.g., repeaters)2 datalink/subnetwork (e.g., bridges)3 internet (e.g., supports the IP)4 end-to-end (e.g., supports the TCP)7 applications (e.g., supports the SMTP)For systems including OSI protocols, layers 5 and 6may also be counted.
+      - 1.3.6.1.4.1.5951.4.1.1.41.8.1.5 # resDiskUsage - Percentage of disk utilization on Citrix ADC.
+  nssysifTable: # OID: 1.3.6.1.2.1.2
+    walk:
+      - 1.3.6.1.2.1.2.1 # ifNumber - A textual description of the entity. This value shouldinclude the full name and version identification ofthe system’s hardware type, software operating-system,and networking software.
+      - 1.3.6.1.2.1.2.2.1.1 # ifIndex - A unique value, greater than zero, for each interface. Itis recommended that values are assigned contiguouslystarting from 1. The value for each interface sub-layermust remain constant at least from one re-initialization ofthe entity’s network management system to the next re-initialization.
+      - 1.3.6.1.2.1.2.2.1.2 # ifDescr - A textual string containing information about theinterface. This string should include the name of themanufacturer, the product name and the version of theinterface hardware/software.
+      - 1.3.6.1.2.1.2.2.1.3 # ifType - The textual identification of the contact person forthis managed node, together with information on howto contact this person. If no contact information isknown, the value is the zero-length string.
+      - 1.3.6.1.2.1.2.2.1.4 # ifMtu - An administratively-assigned name for this managednode. By convention, this is the node’s fully-qualifieddomain name. If the name is unknown, the value isthe zero-length string.
+      - 1.3.6.1.2.1.2.2.1.5 # ifSpeed - The physical location of this node (e.g., ‘telephonecloset, 3rd floor’). If the location is unknown, thevalue is the zero-length string.
+      - 1.3.6.1.2.1.2.2.1.6 # ifPhysAddress - A value which indicates the set of services that thisentity may potentially offer. The value is a sum.This sum initially takes the value zero. Then, foreach layer, L, in the range 1 through 7, that this nodeperforms transactions for, 2 raised to (L - 1) is addedto the sum. For example, a node which performs onlyrouting functions would have a value of 4 (2^(3-1)).In contrast, a node which is a host offering applicationservices would have a value of 72 (2^(4-1) + 2^(7-1)).Note that in the context of the Internet suite ofprotocols, values should be calculated accordingly:layer functionality1 physical (e.g., repeaters)2 datalink/subnetwork (e.g., bridges)3 internet (e.g., supports the IP)4 end-to-end (e.g., supports the TCP)7 applications (e.g., supports the SMTP)For systems including OSI protocols, layers 5 and 6may also be counted.
+      - 1.3.6.1.2.1.2.2.1.7 # ifAdminStatus - The desired state of the interface. The testing(3) stateindicates that no operational packets can be passed. When amanaged system initializes, all interfaces start withifAdminStatus in the down(2) state. As a result of eitherexplicit management action or per configuration informationretained by the managed system, ifAdminStatus is thenchanged to either the up(1) or testing(3) states (or remainsin the down(2) state).
+      - 1.3.6.1.2.1.2.2.1.8 # ifOperStatus - The current operational state of the interface. Thetesting(3) state indicates that no operational packets canbe passed. If ifAdminStatus is down(2) then ifOperStatusshould be down(2). If ifAdminStatus is changed to up(1)then ifOperStatus should change to up(1) if the interface isready to transmit and receive network traffic; it shouldchange to dormant(5) if the interface is waiting forexternal actions (such as a serial line waiting for anincoming connection); it should remain in the down(2) stateif and only if there is a fault that prevents it from goingto the up(1) state; it should remain in the notPresent(6)state if the interface has missing (typically, hardware)components.
+      - 1.3.6.1.2.1.2.2.1.9 # ifLastChange - The value of sysUpTime at the time the interface enteredits current operational state. If the current state wasentered prior to the last re-initialization of the localnetwork management subsystem, then this object contains azero value.
+      - 1.3.6.1.2.1.2.2.1.10 # ifInOctets - The total number of octets received on the interface,including framing characters.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.11 # ifInUcastPkts - The number of packets, delivered by this sub-layer to ahigher (sub-)layer, which were not addressed to a multicastor broadcast address at this sub-layer.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.12 # ifInNUcastPkts
+      - 1.3.6.1.2.1.2.2.1.13 # ifInDiscards - The number of inbound packets which were chosen to bediscarded even though no errors had been detected to preventtheir being deliverable to a higher-layer protocol. Onepossible reason for discarding such a packet could be tofree up buffer space.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.14 # ifInErrors - For packet-oriented interfaces, the number of inboundpackets that contained errors preventing them from beingdeliverable to a higher-layer protocol. For character-oriented or fixed-length interfaces, the number of inboundtransmission units that contained errors preventing themfrom being deliverable to a higher-layer protocol.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.15 # ifInUnknownProtos - For packet-oriented interfaces, the number of packetsreceived via the interface which were discarded because ofan unknown or unsupported protocol. For character-orientedor fixed-length interfaces that support protocolmultiplexing the number of transmission units received viathe interface which were discarded because of an unknown orunsupported protocol. For any interface that does notsupport protocol multiplexing, this counter will always be0.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.16 # ifOutOctets - The total number of octets transmitted out of theinterface, including framing characters.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.17 # ifOutUcastPkts - The total number of packets that higher-level protocolsrequested be transmitted, and which were not addressed to amulticast or broadcast address at this sub-layer, includingthose that were discarded or not sent.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.18 # ifOutNUcastPkts
+      - 1.3.6.1.2.1.2.2.1.19 # ifOutDiscards - The number of outbound packets which were chosen to bediscarded even though no errors had been detected to preventtheir being transmitted. One possible reason for discardingsuch a packet could be to free up buffer space.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.20 # ifOutErrors - For packet-oriented interfaces, the number of outboundpackets that could not be transmitted because of errors.For character-oriented or fixed-length interfaces, thenumber of outbound transmission units that could not betransmitted because of errors.Discontinuities in the value of this counter can occur atre-initialization of the management system, and at othertimes as indicated by the value ofifCounterDiscontinuityTime.
+      - 1.3.6.1.2.1.2.2.1.21 # ifOutQLen
+      - 1.3.6.1.2.1.2.2.1.22 # ifSpecific
+  nsifstatistics: # Network Interface Statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.71.1 # total_rx_mbits - "Total megabits received by Citrix ADC"
+      - 1.3.6.1.4.1.5951.4.1.1.71.2 # total_tx_mbits - "Total megabits transmitted by Citrix ADC"
+      - 1.3.6.1.4.1.5951.4.1.1.71.3 # rx_rate - "Bits received per second"
+      - 1.3.6.1.4.1.5951.4.1.1.71.4 # rx_packets - "Total packets received"
+      - 1.3.6.1.4.1.5951.4.1.1.71.5 # rx_packet_rate - "Packets received per second"
+  nspolbasedroutingstats: # Policy-Based Routing Statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.22.5.23 # pbr_total_hits - Total packets that matched one of the configured PBR
+      - 1.3.6.1.4.1.5951.4.1.1.22.5.24 # pbr_total_misses - Total packets that did not match any PBR
+      - 1.3.6.1.4.1.5951.4.1.1.22.5.24 # pbr_packets_allowed - Total packets that matched PBR with action ALLOW
+      - 1.3.6.1.4.1.5951.4.1.1.22.5.22 # pbr_packets_denied - Total packets that matched PBR with action DENY
+      - 1.3.6.1.4.1.5951.4.1.1.22.5.25 # pbr_null_drops - Total packets dropped due to null nexthop
+      - 1.3.6.1.4.1.5951.4.1.1.22.7.23 # pbr6_total_hits - Total packets that matched one of the configured PBR6
+      - 1.3.6.1.4.1.5951.4.1.1.22.7.24 # pbr6_total_misses - Total packets that did not match any PBR6
+
+  
+  nsicmp: # OID: 1.3.6.1.2.1.5
+    walk:
+      - 1.3.6.1.2.1.5.1 # Total number of ICMP messages which the entity received. Note that this counter includes all those counted by icmpInErrors.
+  nsSysGroup: # 1.3.6.1.4.1.5951.4.1.1 This provides information about the system properties of Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.1 # sysBuildVersion - This shows the version of the kernel build running on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.2 # sysIpAddress - This shows the configured ipaddress of the Citrix ADC
+      - 1.3.6.1.4.1.5951.4.1.1.3 # sysNetmask - This shows the configured netmask of the Citrix ADC
+      - 1.3.6.1.4.1.5951.4.1.1.41.1 # resCpuUsage - CPU utilization percentage.
+      - 1.3.6.1.4.1.5951.4.1.1.41.2 # resMemUsage -Percentage of memory utilization on Citrix ADC.
+      - 1.3.6.1.4.1.2021.10.1.6 # laLoadFloat
+    lookups:
+      - source_indexes: [laIndex]
+        lookup: laNames
+        drop_source_indexes: true
+  nsResourceGroup: # 1.3.6.1.4.1.5951.4.1.1.41 This provides information about system resources in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.41.1 # resCpuUsage - CPU utilization percentage.
+      - 1.3.6.1.4.1.5951.4.1.1.41.2 # resMemUsage -Percentage of memory utilization on Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.41.3 # numCPUs - The number of active CPUs.
