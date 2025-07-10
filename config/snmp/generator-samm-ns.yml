@@ -254,9 +254,263 @@ modules:
       - 1.3.6.1.4.1.5951.4.1.1.22.5.25 # pbr_null_drops - Total packets dropped due to null nexthop
       - 1.3.6.1.4.1.5951.4.1.1.22.7.23 # pbr6_total_hits - Total packets that matched one of the configured PBR6
       - 1.3.6.1.4.1.5951.4.1.1.22.7.24 # pbr6_total_misses - Total packets that did not match any PBR6
-
-  
-  nsicmp: # OID: 1.3.6.1.2.1.5
+      - 1.3.6.1.4.1.5951.4.1.1.22.7.25 # pbr6_total_misses - Total packets that did not match any PBR6
+  nsvservers: # Virtual Server Statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.1 # vs_name - The name of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.2 # vs_ipaddress - IP address of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.3 # vs_port - Port of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.4 # vs_protocol - Protocol of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.5 # vs_state - State of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.7 # vs_CurClntConnections - Number of current client connections.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.8 # vs_CurSrvrConnections - Number of current connections to the actual servers behind the virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.10 # vs_SurgeCount - Number of requests in the surge queue
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.30 # vs_TotalRegs - Number of total requests to the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.31 # vs_TotalReqBytes - Number of total requests to the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.32 # vs_TotalResp - Number of total responses from the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.33 # vs_TotalRespBytes - Number of total response bytes received from the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.34 # vs_TotalPktsReceived - Total number of packets received by this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.35 # vs_TotalPktsSent - Total number of packets sent by this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.36 # vs_TotalSynsRecvd - Total number of SYN packets received from clients on this service (only when directly accessed) or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.37 # vs_CurServicesDown - The current number of services which are bound to this vserver and are in the state ‘down’.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.38 # vs_CurServicesUnKnown - The current number of services which are bound to this vserver and are in the state ‘unKnown’.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.39 # vs_CurServicesOutOfSvc - The current number of services which are bound to this vserver and are in the state ‘outOfService’.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.40 # vs_CurServicesTransToOutOfSvc - The current number of services which are bound to this vserver and are in the state ‘transitionToOutOfService’.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.41 # vs_CurServicesUp - The current number of services which are bound to this vserver and are in the state ‘up’.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.42 # vs_TotMiss - Total vserver misses
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.43 # vs_RequestRate - Request rate in requests per second for this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.44 # vs_RxBytesRate - Request rate in bytes per second fot this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.45 # vs_TxBytesRate - Response rate in bytes per second for this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.46 # vs_SynfloodRate - Rate of unacknowledged SYN packets for this service or virtual server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.47 # vs_Ip6Address - IPv6 address of the v server.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.48 # vs_TotHits - Total vserver hits
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.54 # vs_SpillOvers - Number of times vserver experienced spill over.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.56 # vs_TotalClients - Total number of established client connections.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.58 # vs_ClientConnOpenRate - Rate at which connections are opened for this virtual server per second.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.59 # vs_FullName - The name of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.60 # vs_CurSslVpnUsers -  Number of aaa sessions on this vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.61 # vs_TotalServicesBound - The current number of services which are bound to this vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.62 # vs_Health - The percentage of UP services bound to this vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.63 # vs_TicksSinceLastStateChange - Time (in 10 milliseconds) since the last state change.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.64 # vs_EntityType -  The type of the vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.65 # vs_TotalServers - Total number of established server connections.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.66 # vs_ActiveActiveState - The state of the vserver based on ActiveActive configuration.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.67 # vs_InvalidRequestResponse - Number invalid requests/responses on this vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.68 # vs_InvalidRequestResponseDropped - Number invalid requests/responses dropped on this vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.69 # vs_TdId - Traffic Domain of the vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.70 # vs_SoThreshold - Spill Over Threshold set on the VServer.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.71 # vs_EstablishedConn - Number of client connections in ESTABLISHED state.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.72 # vs_CurSslVpnUsers - Number of aaa sessions on this vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.73 # vs_CurMptcpSessions - Current Multipath TCP sessions
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.74 # vs_CursubflowConn - Current Multipath TCP subflows
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.75 # vs_CurEffState - Current Effective state of vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.76 # vs_CurPersistenceSessions -  Current vserver owned persistence sessions.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.77 # vs_BackupPersistenceSessions - current vserver owned backup persistence sessions
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.78 # vs_ConnReassemblyQueueFlush - Total no of connections incurred TCP reassembly queue flush
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.79 # vs_ConnReassemblyQueue75 - Total no of connections with 75% TCP reassembly queue
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.80 # vs_SvrBusyErr - Total no of server busy error
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.81 # vs_BackupVserver - Name of the backup Vserver
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.82 # vs_TTotalH2Responses - 
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.83 # vs_ServiceHits -  The type of the vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.84 # vs_TotalServers - Total number of established server connections.
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.85 # vs_ActiveActiveState - The state of the vserver based on ActiveActive configuration.
+  nsvservers_svcs: # Virtual Server Services Statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.5 # vssvc_Hits - Total number of hits for this vserver
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.6 # vssvc_PersistentHits - Total number of persistent hits.
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.7 # vssvc_Weight - TThe weight of the service tied to the vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.8 # vssvc_ServiceName - The name of the service to which the vserver is bound.
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.9 # vssvc_FullName - The Full name of the service to which the vserver is bound.
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.10 # vs_FullName - The full name of the vserver.
+      - 1.3.6.1.4.1.5951.4.1.3.2.1.11 # vssvc_EntityType - The entity type of the service: service group member or service.
+  nsSslStatsGroup: # 1.3.6.1.4.1.5951.4.1.1.47 - This provides information about SSL related statistics in the Netscaler product.Virtual Server Services Statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.47.1 # ssl_CardStatus - Status of the SSL card(s). The value should be interpreted in binary form, with each set bit indicates a card as UP.
+      - 1.3.6.1.4.1.5951.4.1.1.47.2 # ssl_EngineStatus - State of the SSL Engine (1=UP/0=DOWN). This state is decided based on SSL Feature/License status and minimum number of cards UP.
+      - 1.3.6.1.4.1.5951.4.1.1.47.3 # ssl_SessionsPerSec - SSL sessions per second between client and Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.200 # ssl_TotTransactions - Number of SSL transactions on the Citrix ADC
+      - 1.3.6.1.4.1.5951.4.1.1.47.202 # ssl_TotSSLv3Transactions - Total number of SSLv3 transactions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.203 # ssl_TotTLSv1Transactions - Number of TLSv1 transactions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.204 # ssl_TotSessions - Number of SSL sessions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.206 # ssl_TotSSLv3Sessions - Number of SSLv3 sessions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.207 # ssl_TotTLSv1Sessions -  Number of TLSv1 sessions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.208 # ssl_TotExpiredSessions - Total number of expired SSL sessions on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.209 # ssl_TotNewSessions - Number of new SSL sessions created on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.210 # ssl_TotSessionHits - Number of SSL session reuse hits on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.211 # ssl_TotSessionMiss - Number of SSL session reuse misses on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.212 # ssl_TotRenegSessions - Number of SSL session renegotiations on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.213 # ssl_TotSSLv3RenegSessions - Number of session renegotiations done on SSLv3.
+      - 1.3.6.1.4.1.5951.4.1.1.47.214 # ssl_TotTLSv1RenegSessions - Number of SSL session renegotiations done on TLSv1.
+      - 1.3.6.1.4.1.5951.4.1.1.47.216 # ssl_TotSSLv3Handshakes - Number of handshakes on SSLv3 on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.217 # ssl_TotTLSv1Handshakes - Number of SSL handshakes on TLSv1 on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.1.47.219 # ssl_TotSSLv3ClientAuthentications - Number of client authentications done on SSLv3.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.1 # ssl_total_transactions - Total number of SSL transactions.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.2 # ssl_current_sessions - Current number of SSL sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.3 # ssl_sessions_rate - Rate of SSL sessions per second.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.4 # ssl_total_bytes_in - Total number of bytes received on SSL connections.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.5 # ssl_total_bytes_out - Total number of bytes sent on SSL connections.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.6 # ssl_total_connections - Total number of SSL connections.
+      - 1.3.6.1.4.1.5951.4.1.1.47.1.7 # ssl_current_connections - Current number of SSL connections.
+  nsCompressionStatsGroup: # 1.3.6.1.4.1.5951.4.1.1.50 - This provides information about Compression related statistics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.50.1 # comp_total_requests - Total number of compression requests.
+      - 1.3.6.1.4.1.5951.4.1.1.50.2 # comp_total_TxBytes - Number of bytes the Citrix ADC sends to the client after compressing the response from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.3 # comp_total_RxBytes - Number of bytes that can be compressed, which the Citrix ADC receives from the server. This gives the content length of the response that the Citrix ADC receives from server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.4 # comp_total_TxPackets - Number of HTTP packets that the Citrix ADC sends to the client after compressing the response from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.5 # comp_total_RxPackets - Number of HTTP packets that can be compressed, which the Citrix ADC receives from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.6 # comp_ratio - Ratio of compressible data received to compressed data transmitted expressed as percentage.
+      - 1.3.6.1.4.1.5951.4.1.1.50.7 # comp_TotalDataCompressionRatio - RRatio of total HTTP data received to total HTTP data transmitted expressed as percentage.
+      - 1.3.6.1.4.1.5951.4.1.1.50.8 # comp_TcpTotalTxBytes - Number of bytes that the Citrix ADC sends to the client after compressing the response from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.9 # comp_TcpTotalRxBytes - Number of bytes that the Citrix ADC receives from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.10 # comp_TcpTotalTxPackets - Number of HTTP packets that the Citrix ADC sends to the client after compressing the response from the server.
+      - 1.3.6.1.4.1.5951.4.1.1.50.11 # comp_TcpTotalRxPackets - Number of HTTP packets that can be compressed, which the Citrix ADC receives from the server.
+  nsCacheStatsGroup: # 1.3.6.1.4.1.5951.4.1.1.49 - This provides information about Cache related statistics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.49.1 # cache_MaxMemoryKB - Largest amount of memory the Citrix ADC can dedicate to caching, up to 50% of available memory. A 0 value disables caching, but the caching module continues to run.
+      - 1.3.6.1.4.1.5951.4.1.1.49.2 # cache_UtilizedMemoryKB - Amount of memory the integrated cache is currently using.
+      - 1.3.6.1.4.1.5951.4.1.1.49.3 # cache_NumCached - Responses currently in integrated cache. Includes responses fully downloaded, in the process of being downloaded, and expired or flushed but not yet removed.
+      - 1.3.6.1.4.1.5951.4.1.1.49.12 # cache_PercentHit - Cache hits as percentage of the total number of requests
+      - 1.3.6.1.4.1.5951.4.1.1.49.13 # cache_RecentPercentHit - Recently recorded cache hit ratio expressed as percentage
+      - 1.3.6.1.4.1.5951.4.1.1.49.14 # cache_CurHits - This number should be close to the number of hits being served currently.
+      - 1.3.6.1.4.1.5951.4.1.1.49.15 # cache_CurMisses - Responses fetched from the origin and served from the cache. Should approximate storable misses. Does not include non-storable misses.
+      - 1.3.6.1.4.1.5951.4.1.1.49.20 # cache_Percent304Hits - 304 responses as a percentage of all responses that the Citrix ADC served.
+      - 1.3.6.1.4.1.5951.4.1.1.49.21 # cache_RecentPercent304Hits - Recently recorded ratio of 304 hits to all hits expressed as percentage
+      - 1.3.6.1.4.1.5951.4.1.1.49.26 # cache_PercentStoreAbleMiss - Responses that were fetched from the origin, stored in the cache, and then served to the client, as a percentage of all cache misses.Responses that were fetched from the origin, stored in the cache, and then served to the client, as a percentage of all cache misses.304 storable misses as a percentage of all storable misses that the Citrix ADC served.
+      - 1.3.6.1.4.1.5951.4.1.1.49.27 # cache_RecentPercentStoreAbleMiss - Recently recorded ratio of store-able misses to all misses expressed as percentage.
+      - 1.3.6.1.4.1.5951.4.1.1.49.45 # cache_TotalRequests - Total cache hits plus total cache misses.
+      - 1.3.6.1.4.1.5951.4.1.1.49.46 # cache_TotalHits - Total cache hits.
+      - 1.3.6.1.4.1.5951.4.1.1.49.47 # cache_TotalMisses - Total cache misses.
+      - 1.3.6.1.4.1.5951.4.1.1.49.48 # cache_Tot304Hits
+      - 1.3.6.1.4.1.5951.4.1.1.49.49 # cache_TotNon304Hits - Total number of full (non-304) responses served from the cache. A 304 status code indicates that a response has not been modified since the last time it was served
+      - 1.3.6.1.4.1.5951.4.1.1.49.50 # cache_TotStoreAbleMisses - Cache misses for which the fetched response is stored in the cache before serving it to the client. Storable misses conform to a built-in or user-defined caching policy that contains a CACHE action.
+      - 1.3.6.1.4.1.5951.4.1.1.49.51 # cache_TotalBytesRate - Total number of bytes rate.
+      - 1.3.6.1.4.1.5951.4.1.1.49.52 # cache_TotalHitsRate - Total cache hits rate.
+  vserverCspolicyTable: # 1.3.6.1.4.1.5951.4.1.3.3 - This provides information about Content Switching Policy related statistics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.3.1.1 # cspolicyName - The name of the content switching policy.
+      - 1.3.6.1.4.1.5951.4.1.3.3.1.2 # cspolicyDestVserverName - The type of the content switching policy.
+      - 1.3.6.1.4.1.5951.4.1.3.3.1.5 # cspolicyHits - The number of hits for this content switching policy.
+      - 1.3.6.1.4.1.5951.4.1.3.3.1.6 # csIndexVserverFullName - The full name of the cs vserver to which this policy belongs.
+      - 1.3.6.1.4.1.5951.4.1.3.4.1.1 # crpolicyName - This represents the name of the policy bound to cache-redirection vserver
+      - 1.3.6.1.4.1.5951.4.1.3.4.1.4 # crpolicyHits - Hits on the cache redirection policy.
+      - 1.3.6.1.4.1.5951.4.1.3.4.1.5 # crIndexVserverFullName - The full name of the cr vserver to which this policy belongs.
+  vserverGlobalStatsGroup: # 1.3.6.1.4.1.5951.4.1.3.5 - This provides information about vserver related statictics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.5.1 # vs_curConfigVservers - Total number of vservers configured on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.3.5.2 # vs_vrBindCount - Number of virtual server bindings on this Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.3.5.3 # vs_vrSvcGrpBindCount - Number of virtual server, service group bindings on this Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.3.5.4 # vs_curConfigLbVservers - Total number of LB vservers configured on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.3.5.5 # vs_curConfigGslbVservers - Total number of active vservers on the Citrix ADC.
+      - 1.3.6.1.4.1.5951.4.1.3.5.6 # vs_totSpilloverCount -  Total count of spillovers.
+  lbvserverTable:
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.6.1.1 # lbvsvrLBMethod - The Policy used for Load Balancing.
+      - 1.3.6.1.4.1.5951.4.1.3.6.1.2 # lbvsvrPersistanceType - The type of persistence used.
+      - 1.3.6.1.4.1.5951.4.1.3.6.1.3 # lbvsvrPersistenceTimeOut - The timeout set for persistence.
+      - 1.3.6.1.4.1.5951.4.1.3.6.1.4 # lbvsvrActiveConn - Number of connections that are currently active.
+      - 1.3.6.1.4.1.5951.4.1.3.6.1.5 # lbvsvrAvgSvrTTFB - Average TTFB between the Citrix ADC and the server. TTFB is the time interval between sending the request packet to a service and receiving the first response from the service
+  gslbGlobalStats: # 1.3.6.1.4.1.5951.4.1.1.51.1 This provides information about GSLB related statistics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.51.1.1 # gslb_customEntries - This is the number of custom locations
+      - 1.3.6.1.4.1.5951.4.1.1.51.1.2 # gslb_staticEntries - This is the number of static locations
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1 # gslb_SitesTable - This table contains gslb sites information This is indexed on the siteName.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.1 # gslb_siteName - This is the name of the GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.2 # gslb_siteIP - The private IP address of this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.3 # gslb_siteType - This is the state of the GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.4 # gslb_siteMetricExchange - Indicates whether metric exchange is enabled or disabled at this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.6 # gslb_sitePublicIp - The public IP address of this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.7 # gslb_siteTotalRequests - Total number of requests received by the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.8 # gslb_siteTotalRequestBytes - Total number of request bytes received by the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.9 # gslb_siteTotalResponses - Number of responses received by the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.10 # gslb_siteTotalResponseBytes - Number of response bytes received by the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.11 # gslb_siteCurSrvrConnections - Number of current connections to the real servers behind the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.12 # gslb_siteCurClntConnections - Number of current client connections to the virtual servers represented by all GSLB services associated with this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.13 # gslb_siteMetricMepStatus - Indicates the status of the site metric Metric Exchange connection at this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.14 # gslb_nwMetricMepStatus - Indicates the status of the network metric Metric Exchange connection at this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.15 # gslb_nwMetricExchangenwMetricExchange - Indicates whether network metric exchange is enabled or disabled at this GSLB site.
+      - 1.3.6.1.4.1.5951.4.1.1.51.2.1.1.16 # gslb_persExchange -  Indicates whether Persistence entries exchange is enabled or disabled at this GSLB site.
+  nsAaaStatsGroup: #  1.3.6.1.4.1.5951.4.1.1.67 - This provides information about AAA related statistics
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.67.1 # aaa_AuthFail - Count of authentication failures.
+      - 1.3.6.1.4.1.5951.4.1.1.67.2 # aaa_AuthSuccess - Count of authentication successes.
+      - 1.3.6.1.4.1.5951.4.1.1.67.3 # aaa_AuthNonHttpFail -  Count of non HTTP connections that failed authorization.
+      - 1.3.6.1.4.1.5951.4.1.1.67.4 # aaa_AuthOnlyHttpFail - Count of HTTP connections that failed authorization.
+      - 1.3.6.1.4.1.5951.4.1.1.67.5 # aaa_AuthNonHttpSuccess - Count of non HTTP connections that succeeded authorization.
+      - 1.3.6.1.4.1.5951.4.1.1.67.6 # aaa_AuthOnlyHttpSuccess - Count of HTTP connections that succeeded authorization.
+      - 1.3.6.1.4.1.5951.4.1.1.67.7 # aaa_TotSessions - Count of all SmartAccess AAA sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.67.8 # aaa_TotSessionTimeout - Count of AAA sessions that have timed out.
+      - 1.3.6.1.4.1.5951.4.1.1.67.9 # aaa_CurSessions - Count of current SmartAccess AAA sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.67.10 # aaa_CurICASessions - Count of current Basic ICA only sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.67.11 # aaa_CurTMSessions - Count of current AAATM sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.67.12 # aaa_TotTMSessions - Count of all AAATM sessions.
+      - 1.3.6.1.4.1.5951.4.1.1.67.13 # aaa_CurICAOnlyConn - Count of current Basic ICA only connections.
+      - 1.3.6.1.4.1.5951.4.1.1.67.14 # aaa_CurICAConn - Count of current SmartAccess ICA connections.
+      - 1.3.6.1.4.1.5951.4.1.1.67.15 # aaa_TotWafBlock - Total Number of Requests that are blocked as part of Appfw Validation for AAA
+      - 1.3.6.1.4.1.5951.4.1.1.67.16 # aaa_tmTotWafBlock - Total Number of Requests that are blocked as part of Appfw Validation for AAATM
+  nsSslVpnStatsGroup: #  1.3.6.1.4.1.5951.4.1.1.66
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.3.1.1.60 # vpn_CurSslVpnUsers - Current number of SSL VPN users.
+      - 1.3.6.1.4.1.5951.4.1.1.66.25 # vpn_staConnSuccess - Number of STA connection success.
+      - 1.3.6.1.4.1.5951.4.1.1.66.26 # vpn_staConnFail - Number of STA connection failure.
+      - 1.3.6.1.4.1.5951.4.1.1.66.27 # vpn_cpsConnSuccess -  Number of CPS connection success.
+      - 1.3.6.1.4.1.5951.4.1.1.66.28 # vpn_cpsConnFailure -  Number of CPS connection failure.
+      - 1.3.6.1.4.1.5951.4.1.1.66.29 # vpn_staRequestSent -  Number of STA request sent.
+      - 1.3.6.1.4.1.5951.4.1.1.66.30 # vpn_staResponseRecvd - Number of STA response received.
+      - 1.3.6.1.4.1.5951.4.1.1.66.31 # vpn_icaLicenseFailure -  Number of ICA license failure.
+      - 1.3.6.1.4.1.5951.4.1.1.66.52 # vpn_LicenseFail - Number of users not able to login because of license unavailability.
+  appFirewallStatistics: # 1.3.6.1.4.1.5951.4.1.1.64.1 This provides Application Firewall statistics in the Netscaler product.
+    walk:
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.1 # af_TotalRequests - Total number of requests processed by the application firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.2 # af_TotalResponses - Total number of responses generated by the application firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.3 # af_Aborts - Total number of bytes received by the application firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.4 # af_Redirects - Total number of bytes sent by the application firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.5 # af_ViolStartURL - Number of Start URL security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.6 # af_ViolDenyURL - Number of Deny URL security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.7 # af_ViolBufferOverflow - Number of Buffer Overflow security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.8 # af_ViolCookie - Number of Cookie Consistency security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.9 # af_ViolXSS - Number of HTML Cross-Site Scripting security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.10 # af_ViolSQL - Number of HTML SQL Injection security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.11 # af_ViolFieldformat - Number of Field Format security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.12 # af_ViolFieldConsistency - Number of XSS security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.13 # af_ViolCreditCard - Number of Credit Card security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.14 # af_ViolSafeObject - Number of Safe Object security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.15 # af_TotalViol - Total number of security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.16 # af_ViolWellformednessViolations - Number of XML Format security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.17 # af_ViolXdosViolations - Number of XML Denial-of-Service security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.18 # af_ViolMsgValViolations - Number of XML Message Validation security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.19 # af_ViolWSIViolations - Number of Web Services Interoperability (WS-I) security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.20 # af_ViolXmlSqlViolations - Number of XML SQL Injection security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.21 # af_ViolXmlXssViolations - Number of XML Cross-Site Scripting (XSS) security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.22 # af_ViolXmlAttachmentViolations - Number of XML Attachment security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.23 # af_ViolCSRFtag - Number of XML CSRF tag security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.24 # af_ViolViolRefererHeader - Number of Referer Header security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.25 # af_ViolXmlSoapFaultViolations - Number of XML SOAP Fault security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.26 # af_Ret4xx - Number of 4xx responses seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.27 # af_Ret5xx - Number of 5xx responses seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.28 # af_ReqBytes - Number of bytes received by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.29 # af_RespBytes - Number of bytes sent by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.30 # af_LongAvgRespTime - Average backend response time in milliseconds since reboot
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.31 # af_ShortAvgRespTime - Average backend response time in milliseconds over the last 7 seconds
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.32 # af_ViolXmlGenViolations - Number of requests returning XML generic error from the backend server
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.33 # af_ViolSignature - Number of Signature violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.34 # af_TrapsDropped - AppFirewall SNMP traps dropped due to time limit.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.35 # af_ViolJsonDos - Number of JSON Denial-of-Service security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.36 # af_ViolJsonSql - Number of JSON SQL Injection security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.37 # af_ViolJsonXss - Number of JSON Cross-Site Scripting (XSS) security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.38 # af_ViolFileUploadTypes - Number of Field Upload Types security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.39 # af_ViolXMLPayloadContentTypeMismatch - Number of Mismatched Content-Type in request with XML Payload security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.40 # af_FirewallViolCookieHijack - Number of Cookie Hijack security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.41 # af_FirewallViolCMD - Number of HTML CMD Injection security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.42 # af_PostBodyLimitViolations - Number of Cross-Site Scripting (XSS) security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.43 # af_ViolJsonCmd - Number of JSON Command Injection security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.44 # af_ViolJsonSqlGram -  Number of JSON SQL Injection security check violations (reported using SQL grammar) seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.45 # af_ViolSQLGram - Number of HTML SQL Injection security check violations (using SQL grammar) seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.46 # af_ViolViolGRPC - Number of gRPC security check violations seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.47 # af_ViolCMDGram - Number of HTML CMD Injection security check violations (using SQL grammar) seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.48 # af_ViolJsonCmdGram - Number of JSON CMD Injection security check violations (reported using CMD grammar) seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.49 # af_ViolBlockKeyword - Number of JSON Cross-Site Scripting (XSS) security check violations (reported using XSS grammar) seen by the Application Firewall.
+      - 1.3.6.1.4.1.5951.4.1.1.64.1.50 # af_ViolJSONBlockKeyword - Number of JSON Cross-Site Scripting (XSS) security check violations (reported using XSS grammar) seen by the Application Firewall.
+  nsIcmp: # 1.3.6.1.4.1.5951.4.1.1.64.1 This provides information about ICMP related statistics in the Netscaler product.
     walk:
       - 1.3.6.1.2.1.5.1 # Total number of ICMP messages which the entity received. Note that this counter includes all those counted by icmpInErrors.
   nsSysGroup: # 1.3.6.1.4.1.5951.4.1.1 This provides information about the system properties of Netscaler product.
@@ -276,3 +530,4 @@ modules:
       - 1.3.6.1.4.1.5951.4.1.1.41.1 # resCpuUsage - CPU utilization percentage.
       - 1.3.6.1.4.1.5951.4.1.1.41.2 # resMemUsage -Percentage of memory utilization on Citrix ADC.
       - 1.3.6.1.4.1.5951.4.1.1.41.3 # numCPUs - The number of active CPUs.
+  
