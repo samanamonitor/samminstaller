@@ -123,17 +123,17 @@ services:
     volumes:
       - ./config/snmp/snmp.yml:/etc/snmp/snmp.yml
 
-# Added configuration generator for snmp_exporter as a profile service, to avoid starting it by default.
+# SNMP exporter and config generator must match versions
+# Added configuration generator for snmp_exporter. Replicas should be modidified to 0 after snmp.yml has been generated
   snmp_configgen:
-    build: ./configgen
-    profiles: config
+    build: ./snmpconfiggen
     restart: on-failure:3
     deploy:
       mode: replicated
       replicas: 1
     volumes:
-      - ./config/snmp/generator-samm.yml:/opt/generator.yml
-      - ./config/snmp/samm-mibs:/opt/generator.yml
+      - ./config/snmp/generator-samm-ns.yml:/opt/generator.yml # This file must be replaced with the specific one that is going to be used for generation
+      - ./config/snmp/samm-mibs:/opt/mibs
       - ./config/snmp:/opt
     command: generate --no-fail-on-parse-errors
   
