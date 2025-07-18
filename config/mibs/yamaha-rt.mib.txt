@@ -1,0 +1,17 @@
+-- $Id: yamaha-rt.mib.txt,v 1.4 2010/11/26 08:46:51 a_onoda Exp $
+
+YAMAHA-RT DEFINITIONS ::= BEGIN
+
+IMPORTS
+	yamahaRT
+		FROM YAMAHA-SMI;
+
+-- group for YAMAHA RT series
+
+yamahaRTHardware		OBJECT IDENTIFIER ::= { yamahaRT 1 }
+yamahaRTFirmware		OBJECT IDENTIFIER ::= { yamahaRT 2 }
+yamahaRTInterfaces		OBJECT IDENTIFIER ::= { yamahaRT 3 }
+yamahaRTIp			OBJECT IDENTIFIER ::= { yamahaRT 4 }
+yamahaRTSwitch			OBJECT IDENTIFIER ::= { yamahaRT 5 }
+
+END
