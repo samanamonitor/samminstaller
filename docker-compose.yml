@@ -115,14 +115,8 @@ services:
       mode: replicated
       replicas: 1
     pull_policy: always
-    environment:
-      RSYSLOG_PROFILE: forwarder
-      FWD_PROTOCOL: udp  # Protocol for Syslog forwarding
-      FWD_TO_HOST: alloy # Forwards syslog to alloy container
-      FWD_TO_PORT: 51893 # Alloy listening port
-      RSYSLOG_CONF: /conf/rsyslog.conf # Maps to rsyslog configuration file in samm configuration folders
-      SNMPTRAPD_CONF: /conf/snmptrapd.conf # Maps to snmptrapd configuration file in samm configuration folders
-      SNMPTRAPD_ARGS: -n -f -M /mibs -m All -Ls2 # -Lf /var/log/trapslog Logs are sent to Local2, uncomment -Lf to sent to a folder inside the container for troubleshooting
+    env_file:
+      - ./config/env/snmptrapd.env
     ports:
       - "162:162/udp"
     volumes:
