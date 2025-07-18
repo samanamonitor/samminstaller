@@ -114,6 +114,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    pull_policy: always
     environment:
       RSYSLOG_PROFILE: forwarder
       FWD_PROTOCOL: udp  # Protocol for Syslog forwarding
