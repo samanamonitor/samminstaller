@@ -104,6 +104,7 @@ services:
     ports:
     # - "12345:12345" - Not published by default, can be accessed via Grafana
       - "51893:51893/udp"
+      - "51894:51894/udp"
     volumes:
       - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
       - mimir-data:/data
