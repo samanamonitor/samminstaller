@@ -49,6 +49,9 @@ ${OPENSSL} req -x509 -newkey rsa:4096 \
 	-days 3650 -nodes \
 	-subj "/C=XX/ST=Florida/L=Miami/O=Samana Group/OU=ITMS/CN=samm.customer.local"
 
+cd ${INSTALL_DIR}/config/dashboards
+git clone https://github.com/samanamonitor/samm-dashboards.git
+
 cat <<EOF | echo
 Environment is ready for configuration.
 The next step is to go into ./env directory and edit all .env files to set passwords and other configuration
