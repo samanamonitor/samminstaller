@@ -91,7 +91,7 @@ services:
     volumes:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
 
-  alloy:
+  syslog:
     image: grafana/alloy:latest
     restart: on-failure:3
     deploy:
@@ -190,6 +190,7 @@ services:
     volumes:
       - ./config/samm:/usr/local/samm/etc
       - ./config/kerberos/krb5.conf:/etc/krb5.conf
+      - ./config/mibs:/mibs
 
   samm-manager:
     build: ./sammmanager
