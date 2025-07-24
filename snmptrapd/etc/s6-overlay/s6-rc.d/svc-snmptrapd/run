@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+SNMPTRAPD_CONF="${SNMPTRAPD_CONF:-/etc/snmptrapd.conf}";
+SNMPTRAPD_ARGS="${SNMPTRAPD_ARGS:- -n -f -M /mibs -m All -Ls2}";
+
+exec \
+    snmptrapd \
+    -c ${SNMPTRAPD_CONF} \
+    ${SNMPTRAPD_ARGS} \
+    ;

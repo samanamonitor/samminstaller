@@ -1,0 +1,21 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+vecho () { if [ "${S6_VERBOSITY:-1}" -gt 0 ]; then echo "[$0] $@"; fi; }
+
+SNMPTRAPD_CONF="${SNMPTRAPD_CONF:-/etc/snmptrapd.conf}";
+SNMPTRAPD_LOGDIR="${SNMPTRAPD_LOGDIR:-/var/log}";
+
+vecho "Ensure configuration directories exist.";
+mkdir -p \
+    $(dirname $SNMPTRAPD_CONF) \
+    ${SNMPTRAPD_LOGDIR} \
+    ${SNMPTRAPD_WORKDIR} \
+    ;
+
+# ensure SNMPTRAPD conf exists
+if [ ! -f "${SNMPTRAPD_CONF}" ];
+then
+    vecho "Setting up snmptrapd configurations at ${SNMPTRAPD_CONF}.";
+    cp /defaults/snmptrapd.conf ${SNMPTRAPD_CONF};
+fi;

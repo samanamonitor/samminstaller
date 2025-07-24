@@ -92,6 +92,40 @@ services:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
 
+  syslog:
+    image: grafana/alloy:latest
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    depends_on:
+      - loki
+      - prometheus
+    ports:
+    # - "12345:12345" - Not published by default, can be accessed via Grafana
+      - "51893:51893/udp"
+      - "51894:51894/udp"
+    volumes:
+      - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
+      - mimir-data:/data
+  snmptrapd:
+    build: ./snmptrapd
+    hostname: SNMPTraps # Hostname in grafana labels
+    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+    pull_policy: always
+    env_file:
+      - ./config/env/snmptrapd.env
+    ports:
+      - "162:162/udp"
+    volumes:
+      - ./config/mibs:/mibs
+      - ./config/snmptrapd/snmptrapd.conf:/conf/snmptrapd.conf
+      - ./config/snmptrapd/rsyslog.conf:/conf/rsyslog.conf
+
   grafana:
     build: ./grafana
     restart: on-failure:3
@@ -158,6 +192,7 @@ services:
     volumes:
       - ./config/samm:/usr/local/samm/etc
       - ./config/kerberos/krb5.conf:/etc/krb5.conf
+      - ./config/mibs:/mibs
 
   samm-manager:
     build: ./sammmanager
