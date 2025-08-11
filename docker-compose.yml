@@ -92,6 +92,9 @@ services:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
 
+  # Alloy is a service that provides a unified interface for managing and querying data from various sources
+  # It is designed to work with Grafana and Prometheus, allowing users to visualize and analyze data from multiple systems in a single dashboard
+  # Used to process syslog messages and SNMP Traps, label them, and send them lo loki
   syslog:
     image: grafana/alloy:latest
     restart: on-failure:3
@@ -109,6 +112,8 @@ services:
     volumes:
       - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
       - mimir-data:/data
+  
+  # This service captures SNMP Traps and converts them to syslog messages, to be forwarded to Alloy
   snmptrapd:
     build: ./snmptrapd
     hostname: SNMPTraps # Hostname in grafana labels
@@ -135,6 +140,7 @@ services:
     pull_policy: always
     env_file:
       - ./config/env/grafana.env
+    # environment section should be deleted, since this has been moved to ./config/env/grafana.env
     environment:
       #- GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: samm-citrixodata-datasource
     depends_on:
@@ -148,7 +154,31 @@ services:
       - ./config/grafana:/etc/grafana
       - ./config/kerberos/krb5.conf:/etc/krb5.conf
       - ./config/dashboards:/var/lib/grafana/dashboards
-      #- ./config/grafana-plugins/samm-citrixodata-datasource:/var/lib/grafana/plugins/samm-citrixodata-datasource
+      - ./config/grafana-plugins/mahendrapaipuri-dashboardreporter-app:/var/lib/grafana/plugins/mahendrapaipuri-dashboardreporter-app #Plugin for PDF Reports
+      #- ./config/grafana-plugins/samm-citrixodata-datasource:/var/lib/grafana/plugins/samm-citrixodata-datasource #Plugin for Citrix Cloud queries
+  
+  # Adding Grafana-image-renderer required for Reporting
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    depends_on:
+      - grafana
+    environment:
+      # Recommendation of grafana-image-renderer for optimal performance
+      # https://grafana.com/docs/grafana/latest/setup-grafana/image-rendering/#configuration
+      - RENDERING_MODE=clustered
+      - RENDERING_CLUSTERING_MODE=context
+      - RENDERING_CLUSTERING_MAX_CONCURRENCY=5
+      - RENDERING_CLUSTERING_TIMEOUT=60
+      - IGNORE_HTTPS_ERRORS=true
+      # - RENDERING_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-accelerated-2d-canvas,--disable-gpu,--remote-debugging-port=9090
+    ports:
+      - 8081:8081
+
+  #Adding headless Chrome required for reporting
+  chrome:
+    image: chromedp/headless-shell:latest
+    shm_size: 2G
+    init: true
 
   load-balancer:
     image: nginx:latest
