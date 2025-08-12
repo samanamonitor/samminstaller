@@ -136,7 +136,7 @@ services:
     env_file:
       - ./config/env/grafana.env
     environment:
-      #- GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: samm-citrixodata-datasource
+      #GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: samm-citrixodata-datasource
     depends_on:
       db:
         condition: service_healthy

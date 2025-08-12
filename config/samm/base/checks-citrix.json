@@ -22,7 +22,7 @@
 		"stale_timeout": 900,
 		"entity": "Machines",
 		"expand": "Catalog,DesktopGroup,CurrentLoadIndex",
-		"filter": "Name ne null",
+		"filter": "Name ne null and LifecycleState eq 0",
 		"metrics": [
 			"CurrentLoadIndex.EffectiveLoadIndex",
 			"CurrentLoadIndex.Cpu",

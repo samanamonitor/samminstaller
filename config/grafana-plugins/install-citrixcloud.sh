@@ -2,6 +2,7 @@
 
 wget https://s3.us-west-2.amazonaws.com/monitor.samanagroup.co/samm-citrixodata-datasource.tgz
 tar -xzvf samm-citrixodata-datasource.tgz
+rm samm-citrixodata-datasource.tgz
 
 echo "### To enable citrix cloud plugin for grafana, modify the docker-compose.yml file"
 echo "### and remove the comment \`#\` sign on the lines that specify the volume that"
