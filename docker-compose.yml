@@ -216,6 +216,8 @@ services:
     volumes:
       - /usr/src:/usr/src
       - ./config/samm:/usr/local/samm/etc
+      - ./config/kerberos/krb5.conf:/etc/krb5.conf
+      - ./config/mibs:/mibs
 
   # repeat this service for each pool
   # if each pool uses the same username and password, then use the sammxen.env
