@@ -89,6 +89,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 
 RUN grafana cli plugins install yesoreyeram-infinity-datasource
+RUN grafana cli plugins install gapit-htmlgraphics-panel
 
 
 # Expose Grafana default port
