@@ -56,3 +56,17 @@ datasources:
       encrypt: 'false'
     secureJsonData:
       password: 'Password!'
+
+  #
+  # Uncomment below section if Citrix Cloud is going to be used.
+  #
+  #- name: samm-citrixodata-datasource
+  # type: "samm-citrixodata-datasource"
+  #  editable: true
+  #  jsonData:
+  #    clientId: "citrixdaasclientid" # CitrixDaas ClientId - Obtained from Citrix Cloud account
+  #    customerId: "citrixdaascustomerid" # CitrixDaas CustomerId - Obtained from Citrix Cloud account
+  #    pdcInjected: false
+  #    urlSpaceEncoding: "%20"
+  #  secureJsonData:
+  #    clientSecret: 'citrixdaassecret' # CitrixDaas ClientSecret - Obtained from Citrix Cloud account
