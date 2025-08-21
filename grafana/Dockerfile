@@ -17,6 +17,12 @@ USER root
 COPY --chown=grafana:root /img/fav32_dark.png /usr/share/grafana/public/img/fav32.png
 COPY --chown=grafana:root /img/apple-touch-icon_dark.png /usr/share/grafana/public/img/apple-touch-icon.png
 COPY --chown=grafana:root /img/grafana_icon_dark.svg /usr/share/grafana/public/img/grafana_icon.svg
+COPY --chown=grafana:root /img/fav32_dark.png /usr/share/grafana/public/build/img/fav32.png
+COPY --chown=grafana:root /img/apple-touch-icon_dark.png /usr/share/grafana/public/build/img/apple-touch-icon.png
+COPY --chown=grafana:root /img/grafana_icon_dark.svg /usr/share/grafana/public/build/img/grafana_icon.svg
+COPY --chown=grafana:root /img/fav32_dark.png /usr/share/grafana/public/build/static/img/fav32.png
+COPY --chown=grafana:root /img/apple-touch-icon_dark.png /usr/share/grafana/public/build/static/img/apple-touch-icon.png
+COPY --chown=grafana:root /img/grafana_icon_dark.svg /usr/share/grafana/public/build/static/img/grafana_icon.1e0deb6b.svg
 # In case we want to change the login background
 # COPY --chown=grafana:root ../config/grafana/img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
 # COPY --chown=grafana:root ../config/grafana/img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
