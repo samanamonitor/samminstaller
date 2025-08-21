@@ -11,4 +11,3 @@ pip install git+https://github.com/samanamonitor/pysammaws.git
 pip install git+https://github.com/samanamonitor/pysammcitrixcloud.git
 pip install pykerberos
 EOF
-COPY mibs/* /usr/share/snmp/mibs

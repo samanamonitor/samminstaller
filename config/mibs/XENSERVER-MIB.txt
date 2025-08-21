@@ -1,0 +1,313 @@
+--
+-- XenServer MIB
+--
+-- Copyright (c) 2023 Cloud Software Group Inc.
+-- All rights Reserved.
+--
+
+XENSERVER-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-TYPE,
+    MODULE-IDENTITY,
+    Unsigned32,
+    enterprises,
+    NOTIFICATION-TYPE
+            FROM SNMPv2-SMI
+    DisplayString,
+    TEXTUAL-CONVENTION
+            FROM SNMPv2-TC;
+
+xenserver MODULE-IDENTITY
+    LAST-UPDATED "202312221300Z"
+    ORGANIZATION "Cloud Software Group Inc."
+    CONTACT-INFO "www.xenserver.com"
+    DESCRIPTION  "The MIB module for managing XenServer."
+    REVISION     "202312221300Z"
+    DESCRIPTION  "Initial revision."
+    ::= { enterprises 60953 }
+
+xenserverProduct    OBJECT IDENTIFIER ::= { xenserver 1 }
+host                OBJECT IDENTIFIER ::= { xenserverProduct 1 }
+traps               OBJECT IDENTIFIER ::= { xenserverProduct 10 }
+
+-- host mib:
+
+metrics OBJECT IDENTIFIER ::= { host 1 }
+
+
+PercentageTC ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d-2"
+    STATUS      current
+    DESCRIPTION "Percentage with two decimal places, e.g. 2860 means 28.60%"
+    SYNTAX      Unsigned32 (0..10000)
+
+
+dom0TotalMemory OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Memory allocated to Dom0 (MB)."
+    ::= { metrics 1 }
+
+dom0FreeMemory  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Free memory of Dom0 (MB)."
+    ::= { metrics 2 }
+
+dom0CPUUsage    OBJECT-TYPE
+    SYNTAX      PercentageTC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "CPU utilization of Dom0."
+    ::= { metrics 3 }
+
+hostTotalMemory OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Total amount of memory in the host (MB)."
+    ::= { metrics 4 }
+
+hostFreeMemory  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Total amount of free memory in the host (MB)."
+    ::= { metrics 5 }
+
+hostCPUUsage    OBJECT-TYPE
+    SYNTAX      PercentageTC
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "The physical CPU utilization of host."
+    ::= { metrics 6 }
+
+pCPUNumber      OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "The number of physical CPUs in the host."
+    ::= { metrics 7 }
+
+vCPUNumberRunning OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "The number of virtual CPUs in running status in the host."
+    ::= { metrics 8 }
+
+vmNumberRunning OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "The number of running VMs, including Dom0, in the host."
+    ::= { metrics 9 }
+
+
+-- trap mib:
+
+MessagePriorityTC ::= TEXTUAL-CONVENTION
+    STATUS          current
+    DESCRIPTION     "The value enumerations of xapi message priority field."
+    SYNTAX          INTEGER {
+        critical(1),
+        major(2),
+        warning(3),
+        minor(4),
+        information(5)
+    }
+
+
+messageTrap         NOTIFICATION-TYPE
+    OBJECTS         {
+        messageOperation,
+        messageRef,
+        messageUuid,
+        messageName,
+        messagePriority,
+        messageClass,
+        messageObjUuid,
+        messageTimestamp,
+        messageBody
+    }
+    STATUS          current
+    DESCRIPTION     "XenServer xapi message based trap."
+    ::= { traps 1 }
+
+messageOperation    OBJECT-TYPE
+    SYNTAX          DisplayString
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message operation type, can be 'add' and 'del'.
+                    'add' means the message object is created in xapi,
+                    and 'del' means the object is destroyed. In the
+                    latter case only messageOperation and messageRef
+                    are required.
+                    When NMS receives 'del' trap, it indicates the 
+                    event/issue of 'add' trap associated by their 
+                    messageRef disappeared/recovered."
+    ::= { messageTrap 1 }
+
+messageRef          OBJECT-TYPE
+    SYNTAX          DisplayString (SIZE (46))
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message reference."
+    ::= { messageTrap 2 }
+
+messageUuid         OBJECT-TYPE
+    SYNTAX          DisplayString (SIZE (36))
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message uuid."
+    ::= { messageTrap 3 }
+
+messageName         OBJECT-TYPE
+    SYNTAX          DisplayString
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message name, which can be: 
+                    - ALARM
+                    - BOND_STATUS_CHANGED
+                    - CLUSTER_HOST_ENABLE_FAILED
+                    - CLUSTER_HOST_FENCING
+                    - EXTAUTH_INIT_IN_HOST_FAILED
+                    - EXTAUTH_IN_POOL_IS_NON_HOMOGENEOUS
+                    - FAILED_LOGIN_ATTEMPTS
+                    - GRACE_LICENSE
+                    - HA_HEARTBEAT_APPROACHING_TIMEOUT
+                    - HA_HOST_FAILED
+                    - HA_HOST_WAS_FENCED
+                    - HA_NETWORK_BONDING_ERROR
+                    - HA_POOL_DROP_IN_PLAN_EXISTS_FOR
+                    - HA_PROTECTED_VM_RESTART_FAILED
+                    - HA_STATEFILE_APPROACHING_TIMEOUT
+                    - HA_STATEFILE_LOST
+                    - HA_XAPI_HEALTHCHECK_APPROACHING_TIMEOUT
+                    - HOST_CLOCK_SKEW_DETECTED
+                    - HOST_CLOCK_WENT_BACKWARDS
+                    - HOST_CPU_FEATURES_DOWN
+                    - HOST_CPU_FEATURES_UP
+                    - HOST_INTERNAL_CERTIFICATE_EXPIRED
+                    - HOST_INTERNAL_CERTIFICATE_EXPIRING_07
+                    - HOST_INTERNAL_CERTIFICATE_EXPIRING_14
+                    - HOST_INTERNAL_CERTIFICATE_EXPIRING_30
+                    - HOST_SERVER_CERTIFICATE_EXPIRED
+                    - HOST_SERVER_CERTIFICATE_EXPIRING_07
+                    - HOST_SERVER_CERTIFICATE_EXPIRING_14
+                    - HOST_SERVER_CERTIFICATE_EXPIRING_30
+                    - HOST_SYNC_DATA_FAILED
+                    - IP_CONFIGURED_PIF_CAN_UNPLUG
+                    - LEAF_COALESCE_COMPLETED
+                    - LEAF_COALESCE_FAILED
+                    - LEAF_COALESCE_START_MESSAGE
+                    - LICENSE_DOES_NOT_SUPPORT_POOLING
+                    - LICENSE_EXPIRED
+                    - LICENSE_EXPIRES_SOON
+                    - LICENSE_NOT_AVAILABLE
+                    - LICENSE_SERVER_CONNECTED
+                    - LICENSE_SERVER_UNAVAILABLE
+                    - LICENSE_SERVER_UNREACHABLE
+                    - LICENSE_SERVER_VERSION_OBSOLETE
+                    - METADATA_LUN_BROKEN
+                    - METADATA_LUN_HEALTHY
+                    - MULTIPATH_PERIODIC_ALERT
+                    - PBD_PLUG_FAILED_ON_SERVER_START
+                    - PERIODIC_UPDATE_SYNC_FAILED
+                    - POOL_CA_CERTIFICATE_EXPIRED
+                    - POOL_CA_CERTIFICATE_EXPIRING_07
+                    - POOL_CA_CERTIFICATE_EXPIRING_14
+                    - POOL_CA_CERTIFICATE_EXPIRING_30
+                    - POOL_CPU_FEATURES_DOWN
+                    - POOL_CPU_FEATURES_UP
+                    - POOL_MASTER_TRANSITION
+                    - POST_ATTACH_SCAN_FAILED
+                    - PVS_PROXY_NO_CACHE_SR_AVAILABLE
+                    - PVS_PROXY_NO_SERVER_AVAILABLE
+                    - PVS_PROXY_SETUP_FAILED
+                    - PVS_PROXY_SR_OUT_OF_SPACE
+                    - TLS_VERIFICATION_EMERGENCY_DISABLED
+                    - UPDATES_FEATURE_EXPIRED
+                    - UPDATES_FEATURE_EXPIRING_CRITICAL
+                    - UPDATES_FEATURE_EXPIRING_MAJOR
+                    - UPDATES_FEATURE_EXPIRING_WARNING
+                    - VBD_QOS_FAILED
+                    - VCPU_QOS_FAILED
+                    - VDI_CBT_METADATA_INCONSISTENT
+                    - VDI_CBT_RESIZE_FAILED
+                    - VDI_CBT_SNAPSHOT_FAILED
+                    - VIF_QOS_FAILED
+                    - VMPP_ARCHIVE_FAILED_0
+                    - VMPP_ARCHIVE_LOCK_FAILED
+                    - VMPP_ARCHIVE_MISSED_EVENT
+                    - VMPP_ARCHIVE_SUCCEEDED
+                    - VMPP_ARCHIVE_TARGET_MOUNT_FAILED
+                    - VMPP_ARCHIVE_TARGET_UNMOUNT_FAILED
+                    - VMPP_LICENSE_ERROR
+                    - VMPP_SNAPSHOT_ARCHIVE_ALREADY_EXISTS
+                    - VMPP_SNAPSHOT_FAILED
+                    - VMPP_SNAPSHOT_LOCK_FAILED
+                    - VMPP_SNAPSHOT_MISSED_EVENT
+                    - VMPP_SNAPSHOT_SUCCEEDED
+                    - VMPP_XAPI_LOGON_FAILURE
+                    - VMSS_LICENSE_ERROR
+                    - VMSS_SNAPSHOT_FAILED
+                    - VMSS_SNAPSHOT_LOCK_FAILED
+                    - VMSS_SNAPSHOT_MISSED_EVENT
+                    - VMSS_SNAPSHOT_SUCCEEDED
+                    - VMSS_XAPI_LOGON_FAILURE
+                    - VM_CHECKPOINTED
+                    - VM_MIGRATED
+                    - VM_PAUSED
+                    - VM_SECURE_BOOT_FAILED
+                    - VM_SNAPSHOTTED
+                    - VM_SNAPSHOT_REVERTED
+                    - VM_UNPAUSED
+                    - WLB_CONSULTATION_FAILED
+                    - WLB_OPTIMIZATION_ALERT
+                    There is also another specific TEST_TRAP, it is used to 
+                    verify the reachability between Xenserver SNMP Agent and 
+                    NMS. It has no 'del' operation trap."
+    ::= { messageTrap 4 }
+
+messagePriority     OBJECT-TYPE
+    SYNTAX          MessagePriorityTC
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message priority."
+    ::= { messageTrap 5 }
+
+messageClass        OBJECT-TYPE
+    SYNTAX          DisplayString
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "The xapi object class, can be VM, Host, SR, Pool, VMPP, 
+                    VMSS, PVS_proxy, VDI and Certificate etc"
+    ::= { messageTrap 6 }
+
+messageObjUuid      OBJECT-TYPE
+    SYNTAX          DisplayString (SIZE (36))
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "The xapi object uuid which owns the message."
+    ::= { messageTrap 7 }
+
+messageTimestamp    OBJECT-TYPE
+    SYNTAX          DisplayString (SIZE (18))
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message timestamp, in format e.g. 20231218T02:13:04Z."
+    ::= { messageTrap 8 }
+
+messageBody         OBJECT-TYPE
+    SYNTAX          DisplayString
+    MAX-ACCESS      accessible-for-notify
+    STATUS          current
+    DESCRIPTION     "Message detail information."
+    ::= { messageTrap 9 }
+
+
+END

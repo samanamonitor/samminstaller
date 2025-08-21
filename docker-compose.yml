@@ -142,7 +142,7 @@ services:
       - ./config/env/grafana.env
     # environment section should be deleted, since this has been moved to ./config/env/grafana.env
     environment:
-      #- GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: samm-citrixodata-datasource
+      #GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: samm-citrixodata-datasource
     depends_on:
       db:
         condition: service_healthy
@@ -246,6 +246,8 @@ services:
     volumes:
       - /usr/src:/usr/src
       - ./config/samm:/usr/local/samm/etc
+      - ./config/kerberos/krb5.conf:/etc/krb5.conf
+      - ./config/mibs:/mibs
 
   # repeat this service for each pool
   # if each pool uses the same username and password, then use the sammxen.env
