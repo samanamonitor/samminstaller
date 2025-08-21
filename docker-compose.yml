@@ -154,7 +154,7 @@ services:
       - ./config/grafana:/etc/grafana
       - ./config/kerberos/krb5.conf:/etc/krb5.conf
       - ./config/dashboards:/var/lib/grafana/dashboards
-      - ./config/grafana-plugins/mahendrapaipuri-dashboardreporter-app:/var/lib/grafana/plugins/mahendrapaipuri-dashboardreporter-app #Plugin for PDF Reports
+      - ./config/grafana-plugins/grafana-dashboardreporter-app:/var/lib/grafana/plugins/grafana-dashboardreporter-app #Plugin for PDF Reports
       #- ./config/grafana-plugins/samm-citrixodata-datasource:/var/lib/grafana/plugins/samm-citrixodata-datasource #Plugin for Citrix Cloud queries
   
   # Adding Grafana-image-renderer required for Reporting
