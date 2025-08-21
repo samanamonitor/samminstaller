@@ -91,30 +91,36 @@ services:
     volumes:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
 
+  #
+  # Change replicas from 0 to 1 to enable syslog message capture
+  #
   syslog:
     image: grafana/alloy:latest
     restart: on-failure:3
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 0
     command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
     depends_on:
       - loki
       - prometheus
     ports:
-    # - "12345:12345" - Not published by default, can be accessed via Grafana
       - "51893:51893/udp"
       - "51894:51894/udp"
     volumes:
       - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
       - mimir-data:/data
+  
+  #
+  # Change replicas from 0 to 1 to enable SNMP Traps capture
+  #
   snmptrapd:
     build: ./snmptrapd
     hostname: SNMPTraps # Hostname in grafana labels
     restart: on-failure:3
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 0
     pull_policy: always
     env_file:
       - ./config/env/snmptrapd.env
