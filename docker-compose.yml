@@ -109,7 +109,6 @@ services:
       - "51894:51894/udp"
     volumes:
       - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
-      - mimir-data:/data
   
   #
   # Change replicas from 0 to 1 to enable SNMP Traps capture
