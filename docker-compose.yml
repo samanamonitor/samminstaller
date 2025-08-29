@@ -223,7 +223,7 @@ services:
   # repeat this service for each pool
   # if each pool uses the same username and password, then use the sammxen.env
   # remember to replace poolmaster_ip with the pool master IP
-  samm-xen-1:
+  samm-xen-1: # If using multiple pools, please change this number for each pool
     build: ./sammxen
     image: samm-xen
     restart: on-failure:3
@@ -234,7 +234,7 @@ services:
       - ./config/env/sammxen.env
     command: [ "/app/config.json" ]
     environment:
-      XEN_HOST: "poolmaster_ip"
+      XEN_HOST: "poolmaster_ip" # Replace "poolmaster_ip" for the IP address of the XS pool master
     volumes:
       - ./config/sammxen/config.json:/app/config.json
 
