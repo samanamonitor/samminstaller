@@ -54,8 +54,6 @@ datasources:
       connMaxLifetime: 14400
       connectionTimeout: 0
       encrypt: 'false'
-    secureJsonData:
-      password: 'Password!'
 
   #
   # Uncomment below section if Citrix Cloud is going to be used.
@@ -68,5 +66,3 @@ datasources:
   #    customerId: "citrixdaascustomerid" # CitrixDaas CustomerId - Obtained from Citrix Cloud account
   #    pdcInjected: false
   #    urlSpaceEncoding: "%20"
-  #  secureJsonData:
-  #    clientSecret: 'citrixdaassecret' # CitrixDaas ClientSecret - Obtained from Citrix Cloud account
