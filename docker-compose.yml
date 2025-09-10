@@ -100,27 +100,27 @@ services:
     restart: on-failure:3
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 0
     command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
     depends_on:
       - loki
       - prometheus
     ports:
-    # - "12345:12345" - Not published by default, can be accessed via Grafana
       - "51893:51893/udp"
       - "51894:51894/udp"
     volumes:
       - ./config/alloy/alloy.conf:/etc/alloy/config.alloy
-      - mimir-data:/data
   
-  # This service captures SNMP Traps and converts them to syslog messages, to be forwarded to Alloy
+  #
+  # Change replicas from 0 to 1 to enable SNMP Traps capture
+  #
   snmptrapd:
     build: ./snmptrapd
     hostname: SNMPTraps # Hostname in grafana labels
     restart: on-failure:3
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 0
     pull_policy: always
     env_file:
       - ./config/env/snmptrapd.env
@@ -247,7 +247,7 @@ services:
   # repeat this service for each pool
   # if each pool uses the same username and password, then use the sammxen.env
   # remember to replace poolmaster_ip with the pool master IP
-  samm-xen-1:
+  samm-xen-1: # If using multiple pools, please change this number for each pool
     build: ./sammxen
     image: samm-xen
     restart: on-failure:3
@@ -258,7 +258,7 @@ services:
       - ./config/env/sammxen.env
     command: [ "/app/config.json" ]
     environment:
-      XEN_HOST: "poolmaster_ip"
+      XEN_HOST: "poolmaster_ip" # Replace "poolmaster_ip" for the IP address of the XS pool master
     volumes:
       - ./config/sammxen/config.json:/app/config.json
 
