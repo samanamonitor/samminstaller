@@ -168,8 +168,6 @@ services:
       - RENDERING_CLUSTERING_TIMEOUT=60
       - IGNORE_HTTPS_ERRORS=true
       # - RENDERING_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-accelerated-2d-canvas,--disable-gpu,--remote-debugging-port=9090
-    ports:
-      - 8081:8081
 
   #Adding headless Chrome required for reporting
   chrome:
