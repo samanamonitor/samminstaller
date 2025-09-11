@@ -30,7 +30,7 @@ apps:
       # 
       # If unset, the plugin will use the configured app URL from Grafana settings.
       #
-      appUrl: http://localhost:3000 #SAMMv2: This MAY have to be configured to the grafana URL to work
+      appUrl: http://grafana:3000 #SAMMv2: This MAY have to be configured to the grafana URL to work
 
       # If Grafana is using HTTPS with self signed certificates, set this parameter to true
       # to skip TLS certificate verification.
