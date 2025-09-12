@@ -549,5 +549,27 @@
 			"ctx_sessions"
 		],
 		"command": "odata4_ctx_cloud"
+	},
+	{
+		"object_type": "check",
+		"name": "ctx_fas_cert_daystoexpire",
+		"command": "file_contents",
+		"smb_share": { "Fn::ref": [ "instance.fas_share", "fascerts" ] },
+		"smb_file_list": [
+				{ "filename": "fascerts.json", "process_output": "jq.DaysToExpire" },
+		],
+		"alias": "smb_serverperf",
+		"check_interval": 300,
+		"stale_timeout": 900,
+		"tag_properties": [
+				"remote_file"
+		],
+		"metrics": [
+				"kilobytes_per_sec",
+				"kilobytes_per_sec_avg",
+				"bytes_total",
+				"download_sec",
+				"output"
+		]
 	}
 ]
