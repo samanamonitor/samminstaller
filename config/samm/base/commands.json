@@ -197,5 +197,18 @@
 			"expand": { "Fn::ref": [ "check.expand" ] },
 			"filter": { "Fn::ref": [ "check.filter" ] }
 		}
+	},
+	{
+			"object_type": "command",
+			"name": "file_contents",
+			"type": "sammsmb.SmbGet",
+			"args": {
+					"server": { "Fn::ref": [ "instance.address" ] },
+					"share": { "Fn::ref": [ "check.smb_share" ] },
+					"file_list": { "Fn::ref": [ "check.smb_file_list" ] },
+					"username": { "Fn::ref": [ "resources.cim_username" ] },
+					"password": { "Fn::ref": [ "resources.cim_password" ] },
+					"keytab": { "Fn::ref": [ "resources.cim_keytab" ] }
+			}
 	}
 ]
