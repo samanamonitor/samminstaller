@@ -1,0 +1,188 @@
+apiVersion: 1
+
+apps:
+  - type: grafana-dashboardreporter-app
+    org_id: 1
+    org_name: Main Org.
+    disabled: false
+    
+    secureJsonData:
+      # If operators want to generate reports programatically using API requests with 
+      # clients like, say `curl`, using service account tokens it is necessary to configure
+      # that **same** service account token in the plugin's config.
+      #
+      # Grafana will use this token to make API requests to Grafana
+      # to fetch dashboards and panels. The token must have appropriate permissions
+      # and roles to be able to generate reports.
+      #
+      # This token can be configured from the Grafana UI as well.
+      #
+      # In Grafana >= 10.3.0, by enabling `externalServiceAccounts` feature flag, this
+      # provisioning of the service account token is done automatically and there is
+      # no need to set the token in the config
+      saToken: ''
+
+    jsonData:
+      # URL is at which Grafana can be accessible from the plugin.
+      # The plugin will make API requests to Grafana to get individual panel in each dashboard to generate reports.
+      # These API requests will be made to this URL.
+      # For most of the deployments the default value http://localhost:3000 will work.
+      # 
+      # If unset, the plugin will use the configured app URL from Grafana settings.
+      #
+      appUrl: http://grafana:3000 #SAMMv2: This MAY have to be configured to the grafana URL to work
+
+      # If Grafana is using HTTPS with self signed certificates, set this parameter to true
+      # to skip TLS certificate verification.
+      #
+      # This is not recommended for production environments.
+      #
+      skipTlsCheck: false
+
+      # Theme of the panels in the report. Possible values are light and dark
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?theme=light or ?theme=dark during report generation process
+      #
+      theme: light
+
+      # Orientation of the report. Possible values are portrait and landscape
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?orientation=portrait or ?orientation=landscape during report generation process
+      #
+      orientation: portrait
+
+      # Layout of the report. Possible values are simple and grid
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?layout=simple or ?layout=grid during report generation process
+      #
+      layout: grid
+
+      # Dashboard mode in the report. Possible values are default and full. In default
+      # mode collapsed rows will be ignored in the report and only Panels visible in 
+      # dashboard by default will be rendered in the report. In the full mode, all the
+      # rows will be expanded and all the panels in the dashboard will be included in
+      # the report.
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?dashboardMode=default or ?dashboardMode=full during report generation process
+      #
+      dashboardMode: default
+
+      # Time zone to use in the report. This should be provided in IANA format.
+      # More details on IANA format can be obtained from https://www.iana.org/time-zones
+      # Eg America/New_York, Asia/Singapore, Australia/Melbourne, Europe/Berlin
+      #
+      # If empty or an invalid format is provided, the plugin defaults to using local
+      # location of the Grafana server.
+      #
+      # This config option is only relevant for Grafana < 11.3.0. For instances, using
+      # Grafana 11.3.0 or above, time zone of the current dashboard will be used as
+      # the timezone for the report generation. For deployments with Grafana < v11.3.0, 
+      # the time zone must be configured on grafana-image-renderer (https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#rendering_timezone)
+      # as well to render the panels in that given time zone.
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?timeZone=America%2FNew_York during report generation process. Note that we 
+      # need to escape URL characters
+      #
+      timeZone: ''
+
+      # Time format to use in the report. The format should be provided as the Golang
+      # time layout. More details can be found in https://pkg.go.dev/time#Layout.
+      #
+      # By default format "Mon Jan _2 15:04:05 MST 2006" is used in the report. If the
+      # provided layout is invalid, it will be ignored and default layout will be used
+      # in the report.
+      #
+      # This setting can be overridden for a particular dashboard by using query parameter
+      # ?timeFormat=2006-01-02+15%3A04%3A05 during report generation process. Note that we 
+      # need to escape URL characters
+      #
+      timeFormat: ''
+
+      # Branding logo in the report.
+      #
+      # A base64 encoded of the logo can be set which will be included in the footer
+      # of the report in each page.
+      #
+      # Do not add the base64 mime type header. Only provided the encoded content. Based
+      # on content's signature, mime type will be detected and appropriate header will be
+      # added.
+      #
+      logo: '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'
+
+      # Header HTML template in the report.
+      #
+      # Custom HTML header template to be used in the report. If empty, default template
+      # will be used
+      #
+      headerTemplate: ''
+
+      # Footer HTML template in the report.
+      #
+      # Custom HTML footer template to be used in the report. If empty, default template
+      # will be used
+      #
+      footerTemplate: ''
+
+      # Header HTML template in the report.
+      #
+      # Custom HTML header template to be used in the report. If empty, default template
+      # will be used
+      #
+      headerTemplateFile: '/etc/grafana/reporting-files/templates/header-template.html'
+
+      # Footer HTML template in the report.
+      #
+      # Custom HTML footer template to be used in the report. If empty, default template
+      # will be used
+      #
+      footerTemplateFile: '/etc/grafana/reporting-files/templates/footer-template.html'
+
+      # Maximum number of workers for interacting with chrome browser.
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      maxBrowserWorkers: 4
+
+      # Maximum number of workers for generating panel PNGs.
+      #
+      # This can be changed from Grafana UI as well and this configuration parameter
+      # applies globally to all generated reports
+      #
+      maxRenderWorkers: 4
+
+      # A URL of a running remote chrome instance. 
+      #
+      # For example, URL can be of form ws://localhost:9222. If empty, a local chrome 
+      # browser will be executed.
+      # If this option is set, ensure that the `appUrl` is reachable is from remote 
+      # chrome instance
+      #
+      remoteChromeUrl: 'http://chrome:9222'
+
+      # Render Panel PNGs natively using current plugin.
+      # When set to `true`, the plugin generates panel PNGs natively without using
+      # `grafana-image-renderer`. Thus, if it is set to `true`, there is no need
+      # to install `grafana-image-renderer`. However, `chromium` must be available
+      # for report and panel PNG generation
+      #
+      # THIS IS HIGHLY EXPERIMENTAL FEATURE.
+      #
+      nativeRenderer: false
